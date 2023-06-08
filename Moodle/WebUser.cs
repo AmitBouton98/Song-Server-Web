@@ -181,7 +181,7 @@ namespace Server.Moodle
         public static bool Delete(string email)
         {
             DBservices dBservices = new DBservices();
-            return dBservices.DeleteUser(email);
+            return true;
         }
     }
 }

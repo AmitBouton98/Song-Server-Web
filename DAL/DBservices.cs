@@ -52,7 +52,7 @@ namespace Server.Moodle.DAL
                 throw (ex);
             }
 
-            cmd = CreateCommandWithStoredProcedure("[Proj_SP_GetAllUsers]", con, null);             // create the command
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetAllUsers", con, null);             // create the command
             var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
 
             returnParameter.Direction = ParameterDirection.ReturnValue;
@@ -70,10 +70,10 @@ namespace Server.Moodle.DAL
                         Convert.ToString(dataReader["Id"]),
                         Convert.ToString(dataReader["First"]),
                         Convert.ToString(dataReader["Last"]),
-                        Convert.ToString(dataReader["Email"].ToString()),
-                        Convert.ToString(dataReader["Password"].ToString()),
-                        Convert.ToString(dataReader["imgUrl"]),
-                        DateTime.Parse((string)dataReader["RegistrationDate"])
+                        Convert.ToString(dataReader["Email"]),
+                        Convert.ToString(dataReader["Password"]),
+                        Convert.ToString(dataReader["ImgUrl"]),
+                        Convert.ToDateTime(dataReader["RegistrationDate"])
                     );
                     UserList.Add(u);
                 }
@@ -126,7 +126,6 @@ namespace Server.Moodle.DAL
             returnParameter.Direction = ParameterDirection.ReturnValue;
 
 
-            UserMusic u = new UserMusic();
 
             try
             {
@@ -134,14 +133,14 @@ namespace Server.Moodle.DAL
 
                 while (dataReader.Read())
                 {
-                    u = new UserMusic(
+                    UserMusic u = new UserMusic(
                         Convert.ToString(dataReader["Id"]),
                         Convert.ToString(dataReader["First"]),
                         Convert.ToString(dataReader["Last"]),
-                        Convert.ToString(dataReader["Email"].ToString()),
-                        Convert.ToString(dataReader["Password"].ToString()),
-                        Convert.ToString(dataReader["imgUrl"]),
-                        DateTime.Parse((string)dataReader["RegistrationDate"])
+                        Convert.ToString(dataReader["Email"]),
+                        Convert.ToString(dataReader["Password"]),
+                        Convert.ToString(dataReader["ImgUrl"]),
+                        Convert.ToDateTime(dataReader["RegistrationDate"])
                     );
                     return u;
                 }
@@ -196,7 +195,6 @@ namespace Server.Moodle.DAL
             returnParameter.Direction = ParameterDirection.ReturnValue;
 
 
-            UserMusic u = new UserMusic();
 
             try
             {
@@ -204,14 +202,14 @@ namespace Server.Moodle.DAL
 
                 while (dataReader.Read())
                 {
-                    u = new UserMusic(
+                    UserMusic u = new UserMusic(
                         Convert.ToString(dataReader["Id"]),
                         Convert.ToString(dataReader["First"]),
                         Convert.ToString(dataReader["Last"]),
-                        Convert.ToString(dataReader["Email"].ToString()),
-                        Convert.ToString(dataReader["Password"].ToString()),
-                        Convert.ToString(dataReader["imgUrl"]),
-                        DateTime.Parse((string)dataReader["RegistrationDate"])
+                        Convert.ToString(dataReader["Email"]),
+                        Convert.ToString(dataReader["Password"]),
+                        Convert.ToString(dataReader["ImgUrl"]),
+                        Convert.ToDateTime(dataReader["RegistrationDate"])
                     );
                     return u;
                 }
@@ -258,7 +256,7 @@ namespace Server.Moodle.DAL
             paramDic.Add("@Email", user.Email);
             paramDic.Add("@Password", user.Password);
             paramDic.Add("@ImgUrl", user.ImgUrl);
-
+            paramDic.Add("@RegistrationDate", DateTime.Now);
             cmd = CreateCommandWithStoredProcedure("Proj_SP_CreateOrUpdateUser", con, paramDic);             // create the command
                                                                                                 // Set up the output parameter
             SqlParameter isSuccessParam = new SqlParameter("@IsSuccess", SqlDbType.Bit);
@@ -310,8 +308,8 @@ namespace Server.Moodle.DAL
             }
 
             Dictionary<string, object> paramDic = new Dictionary<string, object>();
-            paramDic.Add("@key", key);
-            paramDic.Add("@date", date);
+            paramDic.Add("@Key", key);
+            paramDic.Add("@Expired_key", date);
             paramDic.Add("@Email", Email);
 
 
@@ -362,9 +360,9 @@ namespace Server.Moodle.DAL
 
 
             Dictionary<string, object> paramDic = new Dictionary<string, object>();
-            paramDic.Add("@key", key);
-            paramDic.Add("@date", DateTime.Now);
-            paramDic.Add("@userId", email);
+            paramDic.Add("@Key", key);
+            paramDic.Add("@Expired_key", DateTime.Now);
+            paramDic.Add("@Email", email);
 
 
             cmd = CreateCommandWithStoredProcedure("Proj_SP_CheckKeyAndDate", con, paramDic);             // create the command
@@ -375,7 +373,6 @@ namespace Server.Moodle.DAL
 
 
 
-            UserMusic u = new UserMusic();
 
             try
             {
@@ -383,14 +380,14 @@ namespace Server.Moodle.DAL
 
                 while (dataReader.Read())
                 {
-                    u = new UserMusic(
+                    UserMusic u = new UserMusic(
                         Convert.ToString(dataReader["Id"]),
                         Convert.ToString(dataReader["First"]),
                         Convert.ToString(dataReader["Last"]),
-                        Convert.ToString(dataReader["Email"].ToString()),
-                        Convert.ToString(dataReader["Password"].ToString()),
-                        Convert.ToString(dataReader["imgUrl"]),
-                        DateTime.Parse((string)dataReader["RegistrationDate"])
+                        Convert.ToString(dataReader["Email"]),
+                        Convert.ToString(dataReader["Password"]),
+                        Convert.ToString(dataReader["ImgUrl"]),
+                        Convert.ToDateTime(dataReader["RegistrationDate"])
                     );
                     return u;
                 }
@@ -416,9 +413,63 @@ namespace Server.Moodle.DAL
 
         }
 
+                //--------------------------------------------------------------------------------------------------
+        // This method Delete a user by email 
+        //--------------------------------------------------------------------------------------------------
+        public bool DeleteUser(string email)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@Email", email);
 
 
 
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_DeleteUser", con, paramDic);             // create the command
+
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return Convert.ToBoolean(numEffected) ? Convert.ToBoolean(numEffected) : throw new Exception("User Not found");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+
+
+        //--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------
 
         public bool InserFlatToDB(Flat flat)
@@ -1238,102 +1289,7 @@ namespace Server.Moodle.DAL
             }
 
         }
-        //--------------------------------------------------------------------------------------------------
-        // This method Delete a user by email 
-        //--------------------------------------------------------------------------------------------------
-        public bool DeleteUser(string email)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
-            Dictionary<string, object> paramDic = new Dictionary<string, object>();
-            paramDic.Add("@Email", email);
-
-
-
-            cmd = CreateCommandWithStoredProcedure("SP_DeleteUser", con, paramDic);             // create the command
-
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
-                return Convert.ToBoolean(numEffected) ? Convert.ToBoolean(numEffected) : throw new Exception("User Not found");
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
-            finally
-            {
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
-            }
-
-        }
-        //--------------------------------------------------------------------------------------------------
-        // This method Delete a user by email 
-        //--------------------------------------------------------------------------------------------------
-        public bool DeleteFlatById(int id)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
-            Dictionary<string, object> paramDic = new Dictionary<string, object>();
-            paramDic.Add("@FlatID", id);
-
-
-
-            cmd = CreateCommandWithStoredProcedure("SP_Delete_Flat_By_Id", con, paramDic);             // create the command
-
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
-                return Convert.ToBoolean(numEffected) ? Convert.ToBoolean(numEffected) : throw new Exception("Flat Not found");
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
-            finally
-            {
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
-            }
-
-        }
+        
         //--------------------------------------------------------------------------------------------------
         // This method update a user to the user table 
         //--------------------------------------------------------------------------------------------------

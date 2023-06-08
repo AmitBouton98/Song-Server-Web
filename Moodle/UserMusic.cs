@@ -2,9 +2,12 @@
 using Server.Email;
 using Server.Moodle.DAL;
 using System.Text.RegularExpressions;
-
+using System.Runtime.InteropServices;
+using System.Net.Mail;
+using System.Net;
 namespace Server.Moodle
 {
+
     public class UserMusic
     {
 
@@ -26,7 +29,6 @@ namespace Server.Moodle
             ImgUrl = imgUrl;
             RegistrationDate = registrationDate;
         }
-        public UserMusic() { }
         public static List<UserMusic> GetAllUsers()
         {
             DBservices dBservices = new DBservices();
@@ -113,6 +115,10 @@ namespace Server.Moodle
             </html>";
             await emailSender.SendEmailAsync(email, subject, message);
         }
-
+        public static bool Delete(string email)
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.DeleteUser(email);
+        }
     }
 }

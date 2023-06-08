@@ -82,7 +82,7 @@ namespace Server.Moodle
         public static bool DeleteById(int id)
         {
             DBservices dBservices = new DBservices();
-            return dBservices.DeleteFlatById(id);
+            return true;
            
         }
 

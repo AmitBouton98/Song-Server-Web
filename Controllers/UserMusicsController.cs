@@ -24,7 +24,8 @@ namespace Server.Controllers
         {
             try
             {
-                return Ok(UserMusic.GetUserByEmail(email));
+                var usr = await UserMusic.GetUserByEmail(email);
+                return Ok(usr);
             }
             catch(Exception ex)
             {
@@ -84,10 +85,19 @@ namespace Server.Controllers
         {
         }
 
-        // DELETE api/<UserMusicsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // DELETE api/<WebUsersController>/5
+        [HttpDelete("{email}")]
+        public IActionResult Delete(string email)
         {
+            try
+            {
+                var u = UserMusic.Delete(email);
+                return Ok(u);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
