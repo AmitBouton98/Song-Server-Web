@@ -34,8 +34,393 @@ namespace Server.Moodle.DAL
             return con;
         }
         //--------------------------------------------------------------------------------------------------
-        // This method Inserts a student to the student table 
+        // This method get all the users 
         //--------------------------------------------------------------------------------------------------
+        public List<UserMusic> GetAllUsers()
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            cmd = CreateCommandWithStoredProcedure("[Proj_SP_GetAllUsers]", con, null);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+            List<UserMusic> UserList = new List<UserMusic>();
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    UserMusic u = new UserMusic(
+                        Convert.ToString(dataReader["Id"]),
+                        Convert.ToString(dataReader["First"]),
+                        Convert.ToString(dataReader["Last"]),
+                        Convert.ToString(dataReader["Email"].ToString()),
+                        Convert.ToString(dataReader["Password"].ToString()),
+                        Convert.ToString(dataReader["imgUrl"]),
+                        DateTime.Parse((string)dataReader["RegistrationDate"])
+                    );
+                    UserList.Add(u);
+                }
+                return UserList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method get user by email        
+        //--------------------------------------------------------------------------------------------------
+        public UserMusic GetUserByEmail(string email)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@Email", email);
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetUserByEmail", con, paramDic);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+            UserMusic u = new UserMusic();
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    u = new UserMusic(
+                        Convert.ToString(dataReader["Id"]),
+                        Convert.ToString(dataReader["First"]),
+                        Convert.ToString(dataReader["Last"]),
+                        Convert.ToString(dataReader["Email"].ToString()),
+                        Convert.ToString(dataReader["Password"].ToString()),
+                        Convert.ToString(dataReader["imgUrl"]),
+                        DateTime.Parse((string)dataReader["RegistrationDate"])
+                    );
+                    return u;
+                }
+                throw new Exception("User doesnt exists");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
+
+        //--------------------------------------------------------------------------------------------------
+        // This method get check if user exists        
+        //--------------------------------------------------------------------------------------------------
+        public UserMusic CheckUserExists(string email, string password)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@Email", email);
+            paramDic.Add("@Password", password);
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_CheckIfUserExists", con, paramDic);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+            UserMusic u = new UserMusic();
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    u = new UserMusic(
+                        Convert.ToString(dataReader["Id"]),
+                        Convert.ToString(dataReader["First"]),
+                        Convert.ToString(dataReader["Last"]),
+                        Convert.ToString(dataReader["Email"].ToString()),
+                        Convert.ToString(dataReader["Password"].ToString()),
+                        Convert.ToString(dataReader["imgUrl"]),
+                        DateTime.Parse((string)dataReader["RegistrationDate"])
+                    );
+                    return u;
+                }
+                throw new Exception("user doesnt exists");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method insert user        
+        //--------------------------------------------------------------------------------------------------
+
+        public bool InsertOrUpdateUser(UserMusic user)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@First", user.First);
+            paramDic.Add("@Last", user.Last);
+            paramDic.Add("@Email", user.Email);
+            paramDic.Add("@Password", user.Password);
+            paramDic.Add("@ImgUrl", user.ImgUrl);
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_CreateOrUpdateUser", con, paramDic);             // create the command
+                                                                                                // Set up the output parameter
+            SqlParameter isSuccessParam = new SqlParameter("@IsSuccess", SqlDbType.Bit);
+            isSuccessParam.Direction = ParameterDirection.Output;
+            cmd.Parameters.Add(isSuccessParam);
+
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                //int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+                bool isSuccess = (bool)isSuccessParam.Value;
+                return isSuccess;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+        //--------------------------------------------------------------------------------------------------
+        // This method set key and date 
+        //--------------------------------------------------------------------------------------------------
+        public bool SetKeyAndDate(string key, DateTime date, string Email)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@key", key);
+            paramDic.Add("@date", date);
+            paramDic.Add("@Email", Email);
+
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_SetKeyAndExpiredDateByEmail", con, paramDic);             // create the command
+
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return Convert.ToBoolean(numEffected) ? Convert.ToBoolean(numEffected) : throw new Exception("Something wrong");
+
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // this method check the key and the date 
+        //--------------------------------------------------------------------------------------------------
+        public UserMusic checkIfKeyCorrect(string key, string email)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@key", key);
+            paramDic.Add("@date", DateTime.Now);
+            paramDic.Add("@userId", email);
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_CheckKeyAndDate", con, paramDic);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+
+
+            UserMusic u = new UserMusic();
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    u = new UserMusic(
+                        Convert.ToString(dataReader["Id"]),
+                        Convert.ToString(dataReader["First"]),
+                        Convert.ToString(dataReader["Last"]),
+                        Convert.ToString(dataReader["Email"].ToString()),
+                        Convert.ToString(dataReader["Password"].ToString()),
+                        Convert.ToString(dataReader["imgUrl"]),
+                        DateTime.Parse((string)dataReader["RegistrationDate"])
+                    );
+                    return u;
+                }
+                throw new Exception("Key is wrong or expired");
+
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
+
+
+
+
+        //--------------------------------------------------------------------------------------------------
+
         public bool InserFlatToDB(Flat flat)
         {
             SqlConnection con;
@@ -300,65 +685,7 @@ namespace Server.Moodle.DAL
         }
 
         /* Read all the Flats that less than equal to the price*/
-        public List<Order> getAllOrders()
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
-            cmd = CreateCommandWithStoredProcedure("[SP_Get_All_Orders]", con, null);             // create the command
-            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
-
-            returnParameter.Direction = ParameterDirection.ReturnValue;
-
-
-            List<Order> ordersList = new List<Order>();
-
-            try
-            {
-                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-                while (dataReader.Read())
-                {
-                    Order o = new Order(
-                        Convert.ToInt32(dataReader["OrderId"]),
-                        Convert.ToInt32(dataReader["UserId"]),
-                        Convert.ToInt32(dataReader["FlatId"]),
-                        DateTime.Parse(dataReader["StartDate"].ToString()),
-                        DateTime.Parse(dataReader["EndDate"].ToString()),
-                        Convert.ToInt32(dataReader["PricePerNight"])
-                    );
-                    ordersList.Add(o);
-                }
-                return ordersList;
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
-                // note that the return value appears only after closing the connection
-                var result = returnParameter.Value;
-            }
-
-        }
+       
         /* Read all the Flats that less than equal to the price*/
         public Order getOrderById(int orderId)
         {
@@ -1183,120 +1510,6 @@ namespace Server.Moodle.DAL
 
 
             return cmd;
-        }
-        //--------------------------------------------------------------------------------------------------
-        // this method check the key and the date 
-        //--------------------------------------------------------------------------------------------------
-        public WebUser checkIfKeyCorrect(string key, string id)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
-
-            Dictionary<string, object> paramDic = new Dictionary<string, object>();
-            paramDic.Add("@key", key);
-            paramDic.Add("@date", DateTime.Now);
-            paramDic.Add("@userId", int.Parse(id));
-
-
-            cmd = CreateCommandWithStoredProcedure("SP_Reset_password_With_Key", con, paramDic);             // create the command
-            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
-
-            returnParameter.Direction = ParameterDirection.ReturnValue;
-
-
-
-
-            try
-            {
-                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-                while (dataReader.Read())
-                {
-                    WebUser u = new WebUser(dataReader["First"].ToString(), dataReader["Last"].ToString(), dataReader["Id"].ToString(), dataReader["Country"].ToString(), dataReader["Email"].ToString(), dataReader["Password"].ToString(), dataReader["PhoneNumber"].ToString() , dataReader["ImgUrl"].ToString());
-                    return u;
-                }
-                throw new Exception("Key is wrong or expired");
-
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
-            finally
-            {
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
-                // note that the return value appears only after closing the connection
-                var result = returnParameter.Value;
-            }
-
-        }
-        //--------------------------------------------------------------------------------------------------
-        // This method Delete a Order by id 
-        //--------------------------------------------------------------------------------------------------
-        public bool SetKeyAndDate(string key , DateTime date, string id)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
-            Dictionary<string, object> paramDic = new Dictionary<string, object>();
-            paramDic.Add("@key", key);
-            paramDic.Add("@date", date);
-            paramDic.Add("@UserId", int.Parse(id));
-
-
-
-            cmd = CreateCommandWithStoredProcedure("SP_SetKeyAndExpiredDate", con, paramDic);             // create the command
-
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
-                return Convert.ToBoolean(numEffected) ? Convert.ToBoolean(numEffected) : throw new Exception("Something wrong");
-                
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
-            finally
-            {
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
-            }
-
         }
 
     }

@@ -44,7 +44,8 @@ namespace Server.Moodle
         public static List<Order> Read()
         {
             DBservices dbServices = new DBservices();
-            return dbServices.getAllOrders();
+            return null;
+            //return dbServices.getAllOrders();
         }
         public static Order? Read(int id)
         {

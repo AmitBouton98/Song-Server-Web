@@ -54,7 +54,8 @@ namespace Server.Moodle
         public static WebUser? checkIfKeyCorrect(string key, string id)
         {
             DBservices dBservices = new DBservices();
-            return dBservices.checkIfKeyCorrect(key, id);
+            return null;
+            //return dBservices.checkIfKeyCorrect(key, id);
         }
         public async static Task<WebUser?> GetByemail(string email)
         {
