@@ -5,12 +5,15 @@ using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
 using System.Net.Mail;
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
+using System.Runtime.CompilerServices;
+
 namespace Server.Moodle
 {
 
     public class UserMusic
     {
-
         public string Id { get; private set; } // key
         public string First { get; private set; }
         public string Last { get; private set; }
@@ -44,7 +47,7 @@ namespace Server.Moodle
         public static UserMusic CheckUserExists(string email, string password)
         {
             DBservices dBservices = new DBservices();
-            return dBservices.CheckUserExists(email,password);
+            return dBservices.CheckUserExists(email, HashPassword(password)); // hash value with sha256 
         }
         public static UserMusic? checkIfKeyCorrect(string key, string email)
         {
@@ -54,6 +57,7 @@ namespace Server.Moodle
         public static bool InsertOrUpdateUser(UserMusic user)
         {
             DBservices dBservices = new DBservices();
+            user.Password = HashPassword(user.Password); // Encrypt with sha256 algo
             return dBservices.InsertOrUpdateUser(user);
         }
         public async static Task<bool> SetKeyAndEmail(UserMusic user)
@@ -120,5 +124,23 @@ namespace Server.Moodle
             DBservices dBservices = new DBservices();
             return dBservices.DeleteUser(email);
         }
+        //this sha256 algo encrypt the code
+        private static string key = "123";
+
+        public static string HashPassword(string password)
+        {
+            string passwordWithKey = password + key;
+
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(passwordWithKey);
+                byte[] hashBytes = sha256.ComputeHash(passwordBytes);
+                return Convert.ToBase64String(hashBytes);
+            }
+        }
+
+
+
+
     }
 }
