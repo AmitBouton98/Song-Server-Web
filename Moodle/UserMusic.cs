@@ -54,6 +54,11 @@ namespace Server.Moodle
             DBservices dBservices = new DBservices();
             return dBservices.checkIfKeyCorrect(key, email);
         }
+        public static bool ChangePassword(string email,string password, string passwordToChange)
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.ChangePassword(email,HashPassword(password), HashPassword(passwordToChange));
+        }
         public static bool InsertOrUpdateUser(UserMusic user)
         {
             DBservices dBservices = new DBservices();

@@ -340,6 +340,58 @@ namespace Server.Moodle.DAL
 
         }
         //--------------------------------------------------------------------------------------------------
+        // This method change the password 
+        //--------------------------------------------------------------------------------------------------
+        public bool ChangePassword(string email,string password, string passwordToChange)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@Email", email);
+            paramDic.Add("@Password", password);
+            paramDic.Add("@PasswordToChange", passwordToChange);
+
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_ChangePassword", con, paramDic);             // create the command
+
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return Convert.ToBoolean(numEffected) ? Convert.ToBoolean(numEffected) : throw new Exception("Something wrong");
+
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+        //--------------------------------------------------------------------------------------------------
         // this method check the key and the date 
         //--------------------------------------------------------------------------------------------------
         public UserMusic checkIfKeyCorrect(string key, string email)

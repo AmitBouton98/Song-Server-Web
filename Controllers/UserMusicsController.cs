@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Server.Moodle;
 using Server.Moodle.DAL;
 
@@ -80,9 +81,18 @@ namespace Server.Controllers
         }
 
         // PUT api/<UserMusicsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        [Route("Put")]
+        public IActionResult Put(string email,string password, string passwordToChange)
         {
+            try
+            {
+                return Ok(UserMusic.ChangePassword(email,password, passwordToChange));
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
         }
 
         // DELETE api/<WebUsersController>/5
