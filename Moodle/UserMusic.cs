@@ -37,6 +37,7 @@ namespace Server.Moodle
             DBservices dBservices = new DBservices();
             return dBservices.GetAllUsers();
         }
+
         public async static Task<UserMusic> GetUserByEmail(string email)
         {
             DBservices dBservices = new DBservices();
