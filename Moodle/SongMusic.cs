@@ -59,5 +59,10 @@ namespace Server.Moodle
             DBservices dBservices = new DBservices();
             return dBservices.GetTop10GlobalSongs();
         }
+        public static int GetTheNumberPlayedForGivenSong(string SongId)
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.GetTheNumberPlayedForGivenSong(SongId);
+        }
     }
 }

@@ -32,6 +32,11 @@ namespace Server.Moodle
             DBservices dBservices = new DBservices();
             return dBservices.GetTheNumberOfAppearanceInUserByGivenArtist(ArtistName);
         }
+        public static int GetNumberOfPlayedForGivenArtist(string ArtistName)
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.GetNumberOfPlayedForGivenArtist(ArtistName);
+        }
 
     }
 }

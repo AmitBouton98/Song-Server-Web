@@ -1234,6 +1234,124 @@ namespace Server.Moodle.DAL
             }
 
         }
+        //--------------------------------------------------------------------------------------------------
+        // get the number of played for given artist
+        //--------------------------------------------------------------------------------------------------
+        public int GetNumberOfPlayedForGivenArtist(string ArtistName)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@ArtistName", ArtistName);
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetNumberOfPlayedForGivenArtist", con, paramDic);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    return Convert.ToInt32(dataReader["TotalPlays"]);
+
+                }
+                throw new Exception("There is no played for this artist");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // get the number of appearance in user favorite by given song
+        //--------------------------------------------------------------------------------------------------
+        public int GetTheNumberPlayedForGivenSong(string SongId)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@SongId", SongId);
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetTheNumberPlayedForGivenSong", con, paramDic);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    return Convert.ToInt32(dataReader["TotalPlays"]);
+
+                }
+                throw new Exception("There is no played for this song");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
         // end amit
 
         // khaled add this:  **** ******************

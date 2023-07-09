@@ -32,6 +32,22 @@ namespace Server.Controllers
             }
 
         }
+        // GET api/<UserMusicsController>/5
+        [HttpGet]
+        [Route("GetTheNumberPlayedForGivenSong/SongId/{SongId}")]
+        public IActionResult GetTheNumberPlayedForGivenSong(string SongId)
+        {
+            try
+            {
+                var usr = SongMusic.GetTheNumberPlayedForGivenSong(SongId);
+                return Ok(usr);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+
+        }
         [HttpGet]
         [Route("GetTop5SongsForUser")]
         public IActionResult GetTop5SongsForUser(string UserId)
