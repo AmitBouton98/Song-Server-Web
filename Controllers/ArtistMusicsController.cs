@@ -9,14 +9,28 @@ namespace Server.Controllers
     [ApiController]
     public class ArtistMusicsController : ControllerBase
     {
-        // GET: api/<ArtistMusicsController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public List<ArtistMusic> Get()
         {
-            return new string[] { "value1", "value2" };
+            return ArtistMusic.GetAllArtists();
         }
 
-        // GET api/<UserMusicsController>/5
+        [HttpGet]
+        [Route("GetByName/name/{name}")]
+        public  IActionResult GetByName(string name)
+        {
+            try
+            {
+                return Ok(ArtistMusic.GetArtistByName(name));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+
+        }
+      
+
         [HttpGet]
         [Route("GetFavoriteArtistByUserId/UserId/{UserId}")]
         public IActionResult GetFavoriteArtistByUserId(string UserId)
@@ -32,7 +46,7 @@ namespace Server.Controllers
             }
 
         }
-        // GET api/<UserMusicsController>/5
+
         [HttpGet]
         [Route("GetNumberOfPlayedForGivenArtist/ArtistName/{ArtistName}")]
         public IActionResult GetNumberOfPlayedForGivenArtist(string ArtistName)
@@ -48,7 +62,7 @@ namespace Server.Controllers
             }
 
         }
-        // GET api/<UserMusicsController>/5
+
         [HttpGet]
         [Route("GetTheNumberOfAppearanceInUserByGivenArtist/ArtistName/{ArtistName}")]
         public IActionResult GetTheNumberOfAppearanceInUserByGivenArtist(string ArtistName)
@@ -64,12 +78,22 @@ namespace Server.Controllers
             }
 
         }
-        // POST api/<ArtistMusicsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] ArtistMusic artist)
         {
+            try
+            {
+                bool check = ArtistMusic.InsertOrUpdateArtist(artist);
+                return check ? Ok("Artist added") : Ok("Artist Updated");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+
+            }
         }
 
+        // need to change to add favorit to user  FLAGKHALED
         // PUT api/<UserMusicsController>/5
         [HttpPut]
         [Route("Put")]
@@ -97,6 +121,19 @@ namespace Server.Controllers
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+        }
+        [HttpDelete("{name}")]
+        public IActionResult Delete(string name)
+        {
+            try
+            {
+                var u = ArtistMusic.Delete(name);
+                return Ok(u);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

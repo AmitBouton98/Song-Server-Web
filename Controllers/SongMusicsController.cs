@@ -11,11 +11,38 @@ namespace Server.Controllers
     {
         // GET: api/<SongMusicsController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public List<SongMusic> Get()
         {
-            return new string[] { "value1", "value2" };
+            return SongMusic.GetAllSongs();
         }
+        [HttpGet]
+        [Route("GetById/id/{id}")]
+        public IActionResult GetById(string id)
+        {
+            try
+            {
+                return Ok(SongMusic.GetSongById(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
 
+        }
+        [HttpGet]
+        [Route("GetById/artistName/{artistName}")]
+        public IActionResult GetByArtistName(string artistName)
+        {
+            try
+            {
+                return Ok(SongMusic.GetSongByArtistName(artistName));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+
+        }
         // GET api/<UserMusicsController>/5
         [HttpGet]
         [Route("GetFavoriteSongByUserId/UserId/{UserId}")]
@@ -104,10 +131,20 @@ namespace Server.Controllers
             }
 
         }
-        // POST api/<SongMusicsController>
+
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] SongMusic song)
         {
+            try
+            {
+                bool check = SongMusic.InsertOrUpdateSong(song);
+                return check ? Ok("Song added") : Ok("Song Updated");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+
+            }
         }
 
         // PUT api/<UserMusicsController>/5
@@ -146,6 +183,19 @@ namespace Server.Controllers
             try
             {
                 return Ok(SongMusic.DeleteFavoriteSong(UserId, SongId));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+        }
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult Delete(string SongId)
+        {
+            try
+            {
+                return Ok(SongMusic.Delete(SongId));
             }
             catch (Exception ex)
             {
