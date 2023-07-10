@@ -1927,7 +1927,324 @@ namespace Server.Moodle.DAL
 
         }
 
+        //--------------------------------------------------------------------------------------------------
+        // This method insert song comment        
+        //--------------------------------------------------------------------------------------------------
+        public bool InsertSongCommentOrUpdate(SongComment songComment)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@UserId", songComment.UserId);
+            paramDic.Add("@Id", songComment.Id);
+            paramDic.Add("@Comment",songComment.Text);
+            paramDic.Add("@CreateDate", songComment.CreateDate);
+            paramDic.Add("@SongId", songComment.SongId);
+            // create the command
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_CreateOrUpdateCommentForSong", con, paramDic);
+            // Set up the output parameter
+            SqlParameter isSuccessParam = new SqlParameter("@IsSuccess", SqlDbType.Bit);
+            isSuccessParam.Direction = ParameterDirection.Output;
+            cmd.Parameters.Add(isSuccessParam);
 
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                //int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+                bool isSuccess = (bool)isSuccessParam.Value;
+                return isSuccess;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method get all the songs
+        //--------------------------------------------------------------------------------------------------
+        public List<SongComment> GetAllSongComments(string songId)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@Id", songId);
+            // create the command
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetCommentForSong", con, paramDic);
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+            List<SongComment> CommentsList = new List<SongComment>();
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                while (dataReader.Read())
+                {
+                    SongComment sc = new SongComment(
+                       Convert.ToString(dataReader["UserId"]),
+                       Convert.ToString(dataReader["Id"]),
+                       Convert.ToString(dataReader["Comment"]),
+                       Convert.ToString(dataReader["CreateDate"]),
+                       Convert.ToString(dataReader["SongId"])
+                   );
+                    CommentsList.Add(sc);
+                }
+                return CommentsList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method Delete a songComment by id 
+        //--------------------------------------------------------------------------------------------------
+        public bool DeleteSongComment(string id)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            try
+            {
+                paramDic.Add("@Id", Convert.ToInt32(id));
+            }
+            catch
+            {
+                throw new Exception("Id Not in correct format");
+            }
+            // create the command
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_DeletSongComment", con, paramDic);
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return Convert.ToBoolean(numEffected) ? Convert.ToBoolean(numEffected) : throw new Exception("Comment Not found");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method insert artist comment        
+        //--------------------------------------------------------------------------------------------------
+        public bool InsertArtistCommentOrUpdate(ArtistComment artistComment)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@UserId", artistComment.UserId);
+            paramDic.Add("@Id", artistComment.Id);
+            paramDic.Add("@Comment", artistComment.Text);
+            paramDic.Add("@CreateDate", artistComment.CreateDate);
+            paramDic.Add("@ArtistName", artistComment.ArtisName);
+            // create the command
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_CreateOrUpdateCommentForArtist", con, paramDic);
+            // Set up the output parameter
+            SqlParameter isSuccessParam = new SqlParameter("@IsSuccess", SqlDbType.Bit);
+            isSuccessParam.Direction = ParameterDirection.Output;
+            cmd.Parameters.Add(isSuccessParam);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                //int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+                bool isSuccess = (bool)isSuccessParam.Value;
+                return isSuccess;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method get all the artistComments
+        //--------------------------------------------------------------------------------------------------
+        public List<ArtistComment> GetAllArtistComments(string artistName)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@ArtistName", artistName);
+            // create the command
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetCommentForArtist", con, paramDic);
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+            List<ArtistComment> CommentsList = new List<ArtistComment>();
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                while (dataReader.Read())
+                {
+                    ArtistComment ac = new ArtistComment(
+                       Convert.ToString(dataReader["UserId"]),
+                       Convert.ToString(dataReader["Id"]),
+                       Convert.ToString(dataReader["Comment"]),
+                       Convert.ToString(dataReader["CreateDate"]),
+                       Convert.ToString(dataReader["ArtistName"])
+                   );
+                    CommentsList.Add(ac);
+                }
+                return CommentsList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method Delete a artistComment by id 
+        //--------------------------------------------------------------------------------------------------
+        public bool DeleteArtistComment(string id)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            try
+            {
+                paramDic.Add("@Id", Convert.ToInt32(id));
+            }
+            catch
+            {
+                throw new Exception("Id Not in correct format");
+            }
+            // create the command
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_DeletArtistComment", con, paramDic);
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return Convert.ToBoolean(numEffected) ? Convert.ToBoolean(numEffected) : throw new Exception("Comment Not found");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
         //--------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------
