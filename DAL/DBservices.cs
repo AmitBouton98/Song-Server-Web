@@ -830,9 +830,12 @@ namespace Server.Moodle.DAL
                 while (dataReader.Read())
                 {
 
-
                     ArtistMusic u = new ArtistMusic(
                         Convert.ToString(dataReader["ArtistName"]),
+                        Convert.ToString(dataReader["Content"]),
+                        Convert.ToString(dataReader["Published"]),
+                        Convert.ToString(dataReader["Listeners"]),
+                        Convert.ToString(dataReader["Playcount"]),
                         Convert.ToString(dataReader["Likes"])
                     );
                     ArtistMusicList.Add(u);
@@ -1375,6 +1378,10 @@ namespace Server.Moodle.DAL
             }
             Dictionary<string, object> paramDic = new Dictionary<string, object>();
             paramDic.Add("@ArtistName", artist.ArtistName);
+            paramDic.Add("@Content", artist.Content);
+            paramDic.Add("@Published", artist.Published);
+            paramDic.Add("@Listeners", artist.Listeners);
+            paramDic.Add("@Playcount", artist.Playcount);
             paramDic.Add("@Likes", artist.Likes);
             // create the command
             cmd = CreateCommandWithStoredProcedure("Proj_SP_CreateOrUpdateArtist", con, paramDic);             
@@ -1483,11 +1490,15 @@ namespace Server.Moodle.DAL
 
                 while (dataReader.Read())
                 {
-                        ArtistMusic a = new ArtistMusic(
-                            Convert.ToString(dataReader["ArtistName"]),
-                            Convert.ToString(dataReader["Likes"])
-                        );
-                    return a;
+                    ArtistMusic u = new ArtistMusic(
+                        Convert.ToString(dataReader["ArtistName"]),
+                        Convert.ToString(dataReader["Content"]),
+                        Convert.ToString(dataReader["Published"]),
+                        Convert.ToString(dataReader["Listeners"]),
+                        Convert.ToString(dataReader["Playcount"]),
+                        Convert.ToString(dataReader["Likes"])
+                    );
+                    return u;
                 }
                 throw new Exception("User doesnt exists");
             }
@@ -1540,6 +1551,10 @@ namespace Server.Moodle.DAL
                 {
                     ArtistMusic a = new ArtistMusic(
                         Convert.ToString(dataReader["ArtistName"]),
+                        Convert.ToString(dataReader["Content"]),
+                        Convert.ToString(dataReader["Published"]),
+                        Convert.ToString(dataReader["Listeners"]),
+                        Convert.ToString(dataReader["Playcount"]),
                         Convert.ToString(dataReader["Likes"])
                     );
                     ArtistsList.Add(a);

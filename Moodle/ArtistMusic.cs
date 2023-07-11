@@ -6,12 +6,22 @@ namespace Server.Moodle
     {
 
         public string ArtistName { get; private set; }
+        public string Content { get; private set; }
+        public string Published { get; private set; }
+        public string Listeners { get; private set; }
+        public string Playcount { get; private set; }
         public string Likes { get; private set; }
-        public ArtistMusic(string artistName, string likes)
+
+        public ArtistMusic(string artistName, string content, string published, string listeners, string playcount, string likes)
         {
             ArtistName = artistName;
+            Content = content;
+            Published = published;
+            Listeners = listeners;
+            Playcount = playcount;
             Likes = likes;
         }
+
         public static bool AddFavoriteArtist(string UserId, string ArtistName)
         {
             DBservices dBservices = new DBservices();
