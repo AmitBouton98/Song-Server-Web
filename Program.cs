@@ -26,14 +26,12 @@ if (true)
 }
 
 app.UseHttpsRedirection();
-/*
 app.UseStaticFiles(new StaticFileOptions()
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"uploadedFile")),
     RequestPath = new PathString("/Images")
 
 }); 
-*/
 app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 app.UseAuthorization();
