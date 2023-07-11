@@ -1355,6 +1355,132 @@ namespace Server.Moodle.DAL
             }
 
         }
+        //--------------------------------------------------------------------------------------------------
+        // This method get song by name 
+        //--------------------------------------------------------------------------------------------------
+
+        public SongMusic GetSongByName(string name)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+                paramDic.Add("@Name", name);
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetSongByName", con, paramDic);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    SongMusic s = new SongMusic(
+                        Convert.ToString(dataReader["Id"]),
+                        Convert.ToString(dataReader["ArtistName"]),
+                        Convert.ToString(dataReader["Name"]),
+                        Convert.ToString(dataReader["Likes"]),
+                        Convert.ToString(dataReader["LyricLink"]),
+                        Convert.ToString(dataReader["PlayLink"])
+                    );
+                    return s;
+                }
+                throw new Exception("User doesnt exists");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
+
+        //--------------------------------------------------------------------------------------------------
+        // This method get all the songs
+        //--------------------------------------------------------------------------------------------------
+        public List<SongMusic> GetSongByText(string text)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@TextToSearch", text);
+            // create the command
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetSongByText", con, paramDic);
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+            List<SongMusic> SongsList = new List<SongMusic>();
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                while (dataReader.Read())
+                {
+                    SongMusic s = new SongMusic(
+                       Convert.ToString(dataReader["Id"]),
+                       Convert.ToString(dataReader["ArtistName"]),
+                       Convert.ToString(dataReader["Name"]),
+                       Convert.ToString(dataReader["Likes"]),
+                       Convert.ToString(dataReader["LyricLink"]),
+                       Convert.ToString(dataReader["PlayLink"])
+                   );
+                    SongsList.Add(s);
+                }
+                return SongsList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
+
         // end amit
 
         // khaled add this:  **** ****************** KHALEDFLAG.
@@ -1683,7 +1809,7 @@ namespace Server.Moodle.DAL
             }
 
         }
-
+      
         //--------------------------------------------------------------------------------------------------
         // This method get song by id        
         //--------------------------------------------------------------------------------------------------
@@ -1755,71 +1881,6 @@ namespace Server.Moodle.DAL
 
         }
 
-        //--------------------------------------------------------------------------------------------------
-        // This method get song by names        
-        //--------------------------------------------------------------------------------------------------
-        public SongMusic GetSongByName(string name)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
-
-            Dictionary<string, object> paramDic = new Dictionary<string, object>();
-            paramDic.Add("@Name", name);
-           
-            
-
-
-            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetSongByName", con, paramDic);             // create the command
-            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
-            returnParameter.Direction = ParameterDirection.ReturnValue;
-
-            try
-            {
-                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-                while (dataReader.Read())
-                {
-                    SongMusic s = new SongMusic(
-                        Convert.ToString(dataReader["Id"]),
-                        Convert.ToString(dataReader["ArtistName"]),
-                        Convert.ToString(dataReader["Name"]),
-                        Convert.ToString(dataReader["Likes"]),
-                        Convert.ToString(dataReader["LyricLink"]),
-                        Convert.ToString(dataReader["PlayLink"])
-                    );
-                    return s;
-                }
-                throw new Exception("User doesnt exists");
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
-                // note that the return value appears only after closing the connection
-                var result = returnParameter.Value;
-            }
-
-        }
         //--------------------------------------------------------------------------------------------------
         // This method get all the songs by artist name 
         //--------------------------------------------------------------------------------------------------

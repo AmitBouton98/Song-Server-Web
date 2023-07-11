@@ -27,7 +27,32 @@ namespace Server.Controllers
             {
                 return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
             }
-
+        }
+        [HttpGet]
+        [Route("GetSongByName/name/{name}")]
+        public IActionResult GetSongByName(string name)
+        {
+            try
+            {
+                return Ok(SongMusic.GetSongByName(name));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+        }
+        [HttpGet]
+        [Route("GetSongByText/text/{text}")]
+        public IActionResult GetSongByText(string text)
+        {
+            try
+            {
+                return Ok(SongMusic.GetSongByText(text));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
         }
         [HttpGet]
         [Route("GetById/artistName/{artistName}")]
