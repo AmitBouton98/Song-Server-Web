@@ -255,6 +255,7 @@ namespace Server.Moodle.DAL
             }
 
             Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@Id", user.Id);
             paramDic.Add("@First", user.First);
             paramDic.Add("@Last", user.Last);
             paramDic.Add("@Email", user.Email);
@@ -346,7 +347,7 @@ namespace Server.Moodle.DAL
         //--------------------------------------------------------------------------------------------------
         // This method change the password 
         //--------------------------------------------------------------------------------------------------
-        public bool ChangePassword(string email,string password, string passwordToChange)
+        public bool ChangePassword(string id,string password, string passwordToChange)
         {
 
             SqlConnection con;
@@ -363,7 +364,7 @@ namespace Server.Moodle.DAL
             }
 
             Dictionary<string, object> paramDic = new Dictionary<string, object>();
-            paramDic.Add("@Email", email);
+            paramDic.Add("@Id", id);
             paramDic.Add("@Password", password);
             paramDic.Add("@PasswordToChange", passwordToChange);
 
@@ -1400,7 +1401,7 @@ namespace Server.Moodle.DAL
                     );
                     return s;
                 }
-                throw new Exception("User doesnt exists");
+                throw new Exception("song name doesnt exists");
             }
             catch (Exception ex)
             {

@@ -55,7 +55,7 @@ namespace Server.Controllers
             }
         }
         [HttpGet]
-        [Route("GetById/artistName/{artistName}")]
+        [Route("GetByArtistName/artistName/{artistName}")]
         public IActionResult GetByArtistName(string artistName)
         {
             try

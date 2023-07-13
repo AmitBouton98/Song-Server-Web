@@ -16,8 +16,8 @@ namespace Server.Controllers
         }
 
         [HttpGet]
-        [Route("GetByName/name/{name}")]
-        public  IActionResult GetByName(string name)
+        [Route("GetArtistByName/name/{name}")]
+        public  IActionResult GetArtistByName(string name)
         {
             try
             {
