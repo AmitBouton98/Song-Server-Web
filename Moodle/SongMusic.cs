@@ -9,20 +9,32 @@ namespace Server.Moodle
         public string Name { get; private set; }
         public string Likes { get; private set; } 
         public string LyricLink { get; private set; }
-        public string PlayLink { get; private set; }
-        public SongMusic(string id, string artistName, string name, string likes, string lyricLink, string playLink)
+        public string UrlLink { get; private set; }
+        public string YoutubeId { get; private set; }
+        public SongMusic(string id, string artistName, string name, string likes, string lyricLink, string urlLink, string youtubeId)
         {
             Id = id;
             ArtistName = artistName;
             Name = name;
             Likes = likes;
             LyricLink = lyricLink;
-            PlayLink = playLink;
+            UrlLink = urlLink;
+            YoutubeId = youtubeId;
         }
         public static bool AddFavoriteSong(string UserId, string SongId)
         {
             DBservices dBservices = new DBservices();
             return dBservices.AddFavoriteSong(UserId, SongId);
+        }
+        public static bool ChangeYoutubeIdSong(string SongId, string YoutubeId)
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.ChangeYoutubeIdSong(SongId, YoutubeId);
+        }
+        public static bool ChangeSongUrl(string SongId, string Url)
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.ChangeSongUrl(SongId, Url);
         }
         public static bool CreateOrUpdateNumberOfPlayed(string SongId, string UserId)
         {

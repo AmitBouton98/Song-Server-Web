@@ -186,6 +186,32 @@ namespace Server.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
             }
         }
+        [HttpPut]
+        [Route("ChangeSongUrl")]
+        public IActionResult ChangeSongUrl(string SongId, string Url)
+        {
+            try
+            {
+                return Ok(SongMusic.ChangeSongUrl(SongId, Url));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+        }
+        [HttpPut]
+        [Route("ChangeYoutubeIdSong")]
+        public IActionResult ChangeYoutubeIdSong(string SongId, string YoutubeId)
+        {
+            try
+            {
+                return Ok(SongMusic.ChangeYoutubeIdSong(SongId, YoutubeId));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+        }
         // PUT api/<UserMusicsController>/5
         [HttpPut]
         [Route("CreateOrUpdateNumberOfPlayed")]

@@ -570,6 +570,108 @@ namespace Server.Moodle.DAL
 
         }
         //--------------------------------------------------------------------------------------------------
+        // This method add favorite song to user by id 
+        //--------------------------------------------------------------------------------------------------
+        public bool ChangeYoutubeIdSong(string SongId, string YoutubeId)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@SongId", SongId);
+            paramDic.Add("@YoutubeId", YoutubeId);
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_UpdateYoutubeIdForSong", con, paramDic);             // create the command
+                                                                                                          // Set up the output parameter
+                                                                                                          //SqlParameter isSuccessParam = new SqlParameter("@IsSuccess", SqlDbType.Bit);
+                                                                                                          //isSuccessParam.Direction = ParameterDirection.Output;
+                                                                                                          //cmd.Parameters.Add(isSuccessParam);
+
+
+            try
+            {
+                //int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+                //bool isSuccess = (bool)isSuccessParam.Value;
+                return numEffected == 0 ? true : false;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method change song url 
+        //--------------------------------------------------------------------------------------------------
+        public bool ChangeSongUrl(string SongId, string Url)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@SongId", SongId);
+            paramDic.Add("@UrlLink", Url);
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_ChangeUrlLink", con, paramDic);             // create the command
+                                                                                                          // Set up the output parameter
+                                                                                                          //SqlParameter isSuccessParam = new SqlParameter("@IsSuccess", SqlDbType.Bit);
+                                                                                                          //isSuccessParam.Direction = ParameterDirection.Output;
+                                                                                                          //cmd.Parameters.Add(isSuccessParam);
+
+
+            try
+            {
+                //int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+                //bool isSuccess = (bool)isSuccessParam.Value;
+                return numEffected == 0 ? true : false;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
         // This method delete favorite song to user by id 
         //--------------------------------------------------------------------------------------------------
         public bool DeleteFavoriteSong(string UserId, string SongId)
@@ -666,7 +768,8 @@ namespace Server.Moodle.DAL
                         Convert.ToString(dataReader["Name"]),
                         Convert.ToString(dataReader["Likes"]),
                         Convert.ToString(dataReader["LyricLink"]),
-                        Convert.ToString(dataReader["PlayLink"])
+                        Convert.ToString(dataReader["UrlLink"]),
+                        Convert.ToString(dataReader["YoutubeId"])
                     );
                     SongMusicList.Add(u);
                 }
@@ -1025,7 +1128,9 @@ namespace Server.Moodle.DAL
                         Convert.ToString(dataReader["Name"]),
                         Convert.ToString(dataReader["Likes"]),
                         Convert.ToString(dataReader["LyricLink"]),
-                        Convert.ToString(dataReader["PlayLink"])
+                        Convert.ToString(dataReader["UrlLink"]),
+                        Convert.ToString(dataReader["YoutubeId"])
+
                     );
                     SongMusicList.Add(u);
                 }
@@ -1146,7 +1251,8 @@ namespace Server.Moodle.DAL
                                             Convert.ToString(dataReader["Name"]),
                                             Convert.ToString(dataReader["Likes"]),
                                             Convert.ToString(dataReader["LyricLink"]),
-                                            Convert.ToString(dataReader["PlayLink"])
+                                            Convert.ToString(dataReader["UrlLink"]),
+                                            Convert.ToString(dataReader["YoutubeId"])
                                         );
                     SongMusicList.Add(u);
                 }
@@ -1214,7 +1320,8 @@ namespace Server.Moodle.DAL
                                             Convert.ToString(dataReader["Name"]),
                                             Convert.ToString(dataReader["Likes"]),
                                             Convert.ToString(dataReader["LyricLink"]),
-                                            Convert.ToString(dataReader["PlayLink"])
+                                            Convert.ToString(dataReader["UrlLink"]),
+                                            Convert.ToString(dataReader["YoutubeId"])
                                         );
                     SongMusicList.Add(u);
                 }
@@ -1397,7 +1504,8 @@ namespace Server.Moodle.DAL
                         Convert.ToString(dataReader["Name"]),
                         Convert.ToString(dataReader["Likes"]),
                         Convert.ToString(dataReader["LyricLink"]),
-                        Convert.ToString(dataReader["PlayLink"])
+                        Convert.ToString(dataReader["UrlLink"]),
+                        Convert.ToString(dataReader["YoutubeId"])
                     );
                     return s;
                 }
@@ -1458,7 +1566,8 @@ namespace Server.Moodle.DAL
                        Convert.ToString(dataReader["Name"]),
                        Convert.ToString(dataReader["Likes"]),
                        Convert.ToString(dataReader["LyricLink"]),
-                       Convert.ToString(dataReader["PlayLink"])
+                       Convert.ToString(dataReader["UrlLink"]),
+                       Convert.ToString(dataReader["YoutubeId"])
                    );
                     SongsList.Add(s);
                 }
@@ -1729,7 +1838,8 @@ namespace Server.Moodle.DAL
             paramDic.Add("@Name", song.Name);
             paramDic.Add("@Likes", song.Likes);
             paramDic.Add("@LyricLink", song.LyricLink);
-            paramDic.Add("@PlayLink", song.PlayLink);
+            paramDic.Add("@UrlLink", song.UrlLink);
+            paramDic.Add("@YoutubeId", song.YoutubeId);
 
             // create the command
             cmd = CreateCommandWithStoredProcedure("Proj_SP_CreateOrUpdateSong", con, paramDic);
@@ -1858,7 +1968,8 @@ namespace Server.Moodle.DAL
                         Convert.ToString(dataReader["Name"]),
                         Convert.ToString(dataReader["Likes"]),
                         Convert.ToString(dataReader["LyricLink"]),
-                        Convert.ToString(dataReader["PlayLink"])
+                        Convert.ToString(dataReader["UrlLink"]),
+                        Convert.ToString(dataReader["Youtube"])
                     );
                     return s;
                 }
@@ -1920,7 +2031,8 @@ namespace Server.Moodle.DAL
                        Convert.ToString(dataReader["Name"]),
                        Convert.ToString(dataReader["Likes"]),
                        Convert.ToString(dataReader["LyricLink"]),
-                       Convert.ToString(dataReader["PlayLink"])
+                       Convert.ToString(dataReader["UrlLink"]),
+                       Convert.ToString(dataReader["YoutubeId"])
                    );
                     SongsList.Add(s);
                 }
@@ -1980,7 +2092,8 @@ namespace Server.Moodle.DAL
                        Convert.ToString(dataReader["Name"]),
                        Convert.ToString(dataReader["Likes"]),
                        Convert.ToString(dataReader["LyricLink"]),
-                       Convert.ToString(dataReader["PlayLink"])
+                       Convert.ToString(dataReader["UrlLink"]),
+                       Convert.ToString(dataReader["YoutubeId"])
                    );
                     SongsList.Add(s);
                 }
