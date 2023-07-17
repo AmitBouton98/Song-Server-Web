@@ -9,20 +9,39 @@ namespace Server.Moodle
         public string Name { get; private set; }
         public string Likes { get; private set; } 
         public string LyricLink { get; private set; }
-        public string PlayLink { get; private set; }
-        public SongMusic(string id, string artistName, string name, string likes, string lyricLink, string playLink)
+        public string UrlLink { get; private set; }
+        public string YoutubeId { get; private set; }
+        public string Duration { get; private set; }
+        public SongMusic(string id, string artistName, string name, string likes, string lyricLink, string urlLink, string youtubeId, string duration)
         {
             Id = id;
             ArtistName = artistName;
             Name = name;
             Likes = likes;
             LyricLink = lyricLink;
-            PlayLink = playLink;
+            UrlLink = urlLink;
+            YoutubeId = youtubeId;
+            Duration = duration;    
         }
         public static bool AddFavoriteSong(string UserId, string SongId)
         {
             DBservices dBservices = new DBservices();
             return dBservices.AddFavoriteSong(UserId, SongId);
+        }
+        public static int GetNumberOfSongs()
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.GetNumberOfSongs();
+        }
+        public static bool ChangeYoutubeIdSong(string SongId, string YoutubeId)
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.ChangeYoutubeIdSong(SongId, YoutubeId);
+        }
+        public static bool ChangeSongUrl(string SongId, string Url)
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.ChangeSongUrl(SongId, Url);
         }
         public static bool CreateOrUpdateNumberOfPlayed(string SongId, string UserId)
         {
@@ -78,6 +97,16 @@ namespace Server.Moodle
         {
             DBservices dBservices = new DBservices();
             return dBservices.GetSongById(id);
+        }
+        public static SongMusic GetSongByName(string name)
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.GetSongByName(name);
+        }
+        public static List<SongMusic> GetSongByText(string text)
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.GetSongByText(text);
         }
         public static List<SongMusic> GetAllSongs()
         {

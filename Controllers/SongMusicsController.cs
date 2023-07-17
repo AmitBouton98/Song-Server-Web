@@ -27,10 +27,49 @@ namespace Server.Controllers
             {
                 return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
             }
+        }
+        [HttpGet]
+        [Route("GetNumberOfSongs")]
+        public IActionResult GetNumberOfSongs()
+        {
+            try
+            {
+                return Ok(SongMusic.GetNumberOfSongs());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
         }
         [HttpGet]
-        [Route("GetById/artistName/{artistName}")]
+        [Route("GetSongByName/name/{name}")]
+        public IActionResult GetSongByName(string name)
+        {
+            try
+            {
+                return Ok(SongMusic.GetSongByName(name));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+        }
+        [HttpGet]
+        [Route("GetSongByText/text/{text}")]
+        public IActionResult GetSongByText(string text)
+        {
+            try
+            {
+                return Ok(SongMusic.GetSongByText(text));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+        }
+        [HttpGet]
+        [Route("GetByArtistName/artistName/{artistName}")]
         public IActionResult GetByArtistName(string artistName)
         {
             try
@@ -155,6 +194,32 @@ namespace Server.Controllers
             try
             {
                 return Ok(SongMusic.AddFavoriteSong(UserId, SongId));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+        }
+        [HttpPut]
+        [Route("ChangeSongUrl")]
+        public IActionResult ChangeSongUrl(string SongId, string Url)
+        {
+            try
+            {
+                return Ok(SongMusic.ChangeSongUrl(SongId, Url));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+        }
+        [HttpPut]
+        [Route("ChangeYoutubeIdSong")]
+        public IActionResult ChangeYoutubeIdSong(string SongId, string YoutubeId)
+        {
+            try
+            {
+                return Ok(SongMusic.ChangeYoutubeIdSong(SongId, YoutubeId));
             }
             catch (Exception ex)
             {

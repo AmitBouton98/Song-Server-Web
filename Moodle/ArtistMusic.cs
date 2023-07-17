@@ -21,7 +21,11 @@ namespace Server.Moodle
             Playcount = playcount;
             Likes = likes;
         }
-
+        public static int GetNumberOfArtists()
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.GetNumberOfArtists();
+        }
         public static bool AddFavoriteArtist(string UserId, string ArtistName)
         {
             DBservices dBservices = new DBservices();

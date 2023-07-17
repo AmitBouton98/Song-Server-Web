@@ -48,6 +48,20 @@ namespace Server.Controllers
             }
 
         }
+        [HttpGet]
+        [Route("GetNumberOfUsers")]
+        public IActionResult GetNumberOfUsers()
+        {
+            try
+            {
+                return Ok(UserMusic.GetNumberOfUsers());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
         // GET api/<UserMusicsController>/5
         [HttpGet]
         [Route("CheckIfExists")]
@@ -82,11 +96,11 @@ namespace Server.Controllers
         // PUT api/<UserMusicsController>/5
         [HttpPut]
         [Route("Put")]
-        public IActionResult Put(string email,string password, string passwordToChange)
+        public IActionResult Put(string id,string password, string passwordToChange)
         {
             try
             {
-                return Ok(UserMusic.ChangePassword(email,password, passwordToChange));
+                return Ok(UserMusic.ChangePassword(id,password, passwordToChange));
             }
             catch(Exception ex)
             {

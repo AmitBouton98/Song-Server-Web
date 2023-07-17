@@ -55,10 +55,10 @@ namespace Server.Moodle
             DBservices dBservices = new DBservices();
             return dBservices.checkIfKeyCorrect(key, email);
         }
-        public static bool ChangePassword(string email,string password, string passwordToChange)
+        public static bool ChangePassword(string id,string password, string passwordToChange)
         {
             DBservices dBservices = new DBservices();
-            return dBservices.ChangePassword(email,HashPassword(password), HashPassword(passwordToChange));
+            return dBservices.ChangePassword(id,HashPassword(password), HashPassword(passwordToChange));
         }
         public static bool InsertOrUpdateUser(UserMusic user)
         {
@@ -129,6 +129,11 @@ namespace Server.Moodle
         {
             DBservices dBservices = new DBservices();
             return dBservices.DeleteUser(email);
+        }
+        public static int GetNumberOfUsers()
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.GetNumberOfUsers();
         }
         //this sha256 algo encrypt the code
         private static string key = "123";
