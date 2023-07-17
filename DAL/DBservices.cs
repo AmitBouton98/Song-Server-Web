@@ -255,6 +255,7 @@ namespace Server.Moodle.DAL
             }
 
             Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@Id", user.Id);
             paramDic.Add("@First", user.First);
             paramDic.Add("@Last", user.Last);
             paramDic.Add("@Email", user.Email);

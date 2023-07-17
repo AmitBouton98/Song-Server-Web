@@ -1,6 +1,7 @@
 using Microsoft.Extensions.FileProviders;
 using System.Net.Mail;
 using Server.Email;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -28,7 +29,7 @@ if (true)
 app.UseHttpsRedirection();
 app.UseStaticFiles(new StaticFileOptions()
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"uploadedFile")),
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"usersImages")),
     RequestPath = new PathString("/Images")
 
 }); 

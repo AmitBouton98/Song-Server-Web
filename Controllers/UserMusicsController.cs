@@ -17,7 +17,7 @@ namespace Server.Controllers
         {
             return UserMusic.GetAllUsers();
         }
-
+        // this funcition used just in the reset password exec
         // GET api/<UserMusicsController>/5
         [HttpGet]
         [Route("GetByemail/email/{email}")]

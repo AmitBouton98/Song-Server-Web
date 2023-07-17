@@ -104,7 +104,7 @@ namespace Server.Moodle
             <html lang=""en"">
             <body style=""background-color: rgba(0, 0, 0, 0.761);"">
             <div style=""text-align: center;"">
-                <img src=""https://cdn.discordapp.com/attachments/1104395876857819199/1104396286314160218/cdnlogo.com_airbnb.png"" alt="""" style=""object-fit: contain; max-height: 250px;"">
+                <img src=""https://media.discordapp.net/attachments/1092515523717234700/1130442483952795699/touch-icon-ipad-retina.png"" alt="""" style=""object-fit: contain; max-height: 250px;"">
                 <h1 style=""color:white; text-align: center;"">Hello {user.First} {user.Last}, This is the 6 digits code that you can use for
                     reseting your password</h1>
                 <p style=""color: white;"">select the numbers to copy</p>
