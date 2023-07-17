@@ -399,7 +399,7 @@ namespace Server.Moodle.DAL
         //--------------------------------------------------------------------------------------------------
         // this method check the key and the date 
         //--------------------------------------------------------------------------------------------------
-        public UserMusic checkIfKeyCorrect(string key, string email)
+        public UserMusic checkIfKeyCorrect(string key, string email, string password)
         {
 
             SqlConnection con;
@@ -420,7 +420,8 @@ namespace Server.Moodle.DAL
             paramDic.Add("@Key", key);
             paramDic.Add("@Expired_key", DateTime.Now);
             paramDic.Add("@Email", email);
-
+            // khaled changed 
+            paramDic.Add("@Password", password);
 
             cmd = CreateCommandWithStoredProcedure("Proj_SP_CheckKeyAndDate", con, paramDic);             // create the command
             var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);

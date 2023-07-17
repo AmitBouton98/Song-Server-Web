@@ -36,11 +36,11 @@ namespace Server.Controllers
         }
         [HttpGet]
         [Route("CheckIfKeyCorrect")]
-        public IActionResult CheckIfKeyCorrect(string key, string email)
+        public IActionResult CheckIfKeyCorrect(string key, string email, string password)
         {
             try
             {
-                return Ok(UserMusic.checkIfKeyCorrect(key, email));
+                return Ok(UserMusic.checkIfKeyCorrect(key, email, password));
             }
             catch (Exception ex)
             {

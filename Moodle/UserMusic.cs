@@ -50,10 +50,10 @@ namespace Server.Moodle
             DBservices dBservices = new DBservices();
             return dBservices.CheckUserExists(email, HashPassword(password)); // hash value with sha256 
         }
-        public static UserMusic? checkIfKeyCorrect(string key, string email)
+        public static UserMusic? checkIfKeyCorrect(string key, string email, string password)
         {
             DBservices dBservices = new DBservices();
-            return dBservices.checkIfKeyCorrect(key, email);
+            return dBservices.checkIfKeyCorrect(key, email, HashPassword(password));
         }
         public static bool ChangePassword(string id,string password, string passwordToChange)
         {
