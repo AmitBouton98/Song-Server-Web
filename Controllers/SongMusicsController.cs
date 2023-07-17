@@ -29,6 +29,20 @@ namespace Server.Controllers
             }
         }
         [HttpGet]
+        [Route("GetNumberOfSongs")]
+        public IActionResult GetNumberOfSongs()
+        {
+            try
+            {
+                return Ok(SongMusic.GetNumberOfSongs());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+        [HttpGet]
         [Route("GetSongByName/name/{name}")]
         public IActionResult GetSongByName(string name)
         {

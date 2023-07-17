@@ -130,6 +130,11 @@ namespace Server.Moodle
             DBservices dBservices = new DBservices();
             return dBservices.DeleteUser(email);
         }
+        public static int GetNumberOfUsers()
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.GetNumberOfUsers();
+        }
         //this sha256 algo encrypt the code
         private static string key = "123";
 

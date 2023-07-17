@@ -48,6 +48,20 @@ namespace Server.Controllers
             }
 
         }
+        [HttpGet]
+        [Route("GetNumberOfUsers")]
+        public IActionResult GetNumberOfUsers()
+        {
+            try
+            {
+                return Ok(UserMusic.GetNumberOfUsers());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
         // GET api/<UserMusicsController>/5
         [HttpGet]
         [Route("CheckIfExists")]

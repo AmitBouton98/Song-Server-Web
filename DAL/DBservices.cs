@@ -769,7 +769,8 @@ namespace Server.Moodle.DAL
                         Convert.ToString(dataReader["Likes"]),
                         Convert.ToString(dataReader["LyricLink"]),
                         Convert.ToString(dataReader["UrlLink"]),
-                        Convert.ToString(dataReader["YoutubeId"])
+                        Convert.ToString(dataReader["YoutubeId"]),
+                        Convert.ToString(dataReader["Duration"])
                     );
                     SongMusicList.Add(u);
                 }
@@ -1129,7 +1130,9 @@ namespace Server.Moodle.DAL
                         Convert.ToString(dataReader["Likes"]),
                         Convert.ToString(dataReader["LyricLink"]),
                         Convert.ToString(dataReader["UrlLink"]),
-                        Convert.ToString(dataReader["YoutubeId"])
+                        Convert.ToString(dataReader["YoutubeId"]),
+                        Convert.ToString(dataReader["Duration"])
+
 
                     );
                     SongMusicList.Add(u);
@@ -1252,7 +1255,8 @@ namespace Server.Moodle.DAL
                                             Convert.ToString(dataReader["Likes"]),
                                             Convert.ToString(dataReader["LyricLink"]),
                                             Convert.ToString(dataReader["UrlLink"]),
-                                            Convert.ToString(dataReader["YoutubeId"])
+                                            Convert.ToString(dataReader["YoutubeId"]),
+                                            Convert.ToString(dataReader["Duration"])
                                         );
                     SongMusicList.Add(u);
                 }
@@ -1321,7 +1325,8 @@ namespace Server.Moodle.DAL
                                             Convert.ToString(dataReader["Likes"]),
                                             Convert.ToString(dataReader["LyricLink"]),
                                             Convert.ToString(dataReader["UrlLink"]),
-                                            Convert.ToString(dataReader["YoutubeId"])
+                                            Convert.ToString(dataReader["YoutubeId"]),
+                                            Convert.ToString(dataReader["Duration"])
                                         );
                     SongMusicList.Add(u);
                 }
@@ -1505,7 +1510,8 @@ namespace Server.Moodle.DAL
                         Convert.ToString(dataReader["Likes"]),
                         Convert.ToString(dataReader["LyricLink"]),
                         Convert.ToString(dataReader["UrlLink"]),
-                        Convert.ToString(dataReader["YoutubeId"])
+                        Convert.ToString(dataReader["YoutubeId"]),
+                        Convert.ToString(dataReader["Duration"])
                     );
                     return s;
                 }
@@ -1567,7 +1573,8 @@ namespace Server.Moodle.DAL
                        Convert.ToString(dataReader["Likes"]),
                        Convert.ToString(dataReader["LyricLink"]),
                        Convert.ToString(dataReader["UrlLink"]),
-                       Convert.ToString(dataReader["YoutubeId"])
+                       Convert.ToString(dataReader["YoutubeId"]),
+                       Convert.ToString(dataReader["Duration"])
                    );
                     SongsList.Add(s);
                 }
@@ -1590,7 +1597,126 @@ namespace Server.Moodle.DAL
             }
 
         }
+        //--------------------------------------------------------------------------------------------------
+        // This method get the number of users
+        //--------------------------------------------------------------------------------------------------
+        public int GetNumberOfUsers()
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
 
+            // create the command
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetNumberOfUsers", con, null);
+            try
+            {
+                int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method get the number of users
+        //--------------------------------------------------------------------------------------------------
+        public int GetNumberOfSongs()
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            // create the command
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetNumberOfSongs", con, null);
+            try
+            {
+                int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method get the number of users
+        //--------------------------------------------------------------------------------------------------
+        public int GetNumberOfArtists()
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            // create the command
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetNumberOfArtists", con, null);
+            try
+            {
+                int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
         // end amit
 
         // khaled add this:  **** ****************** KHALEDFLAG.
@@ -1840,6 +1966,7 @@ namespace Server.Moodle.DAL
             paramDic.Add("@LyricLink", song.LyricLink);
             paramDic.Add("@UrlLink", song.UrlLink);
             paramDic.Add("@YoutubeId", song.YoutubeId);
+            paramDic.Add("@Duration", song.Duration);
 
             // create the command
             cmd = CreateCommandWithStoredProcedure("Proj_SP_CreateOrUpdateSong", con, paramDic);
@@ -1969,7 +2096,8 @@ namespace Server.Moodle.DAL
                         Convert.ToString(dataReader["Likes"]),
                         Convert.ToString(dataReader["LyricLink"]),
                         Convert.ToString(dataReader["UrlLink"]),
-                        Convert.ToString(dataReader["Youtube"])
+                        Convert.ToString(dataReader["Youtube"]),
+                        Convert.ToString(dataReader["Duration"])
                     );
                     return s;
                 }
@@ -2032,7 +2160,8 @@ namespace Server.Moodle.DAL
                        Convert.ToString(dataReader["Likes"]),
                        Convert.ToString(dataReader["LyricLink"]),
                        Convert.ToString(dataReader["UrlLink"]),
-                       Convert.ToString(dataReader["YoutubeId"])
+                       Convert.ToString(dataReader["YoutubeId"]),
+                       Convert.ToString(dataReader["Duration"])
                    );
                     SongsList.Add(s);
                 }
@@ -2093,7 +2222,8 @@ namespace Server.Moodle.DAL
                        Convert.ToString(dataReader["Likes"]),
                        Convert.ToString(dataReader["LyricLink"]),
                        Convert.ToString(dataReader["UrlLink"]),
-                       Convert.ToString(dataReader["YoutubeId"])
+                       Convert.ToString(dataReader["YoutubeId"]),
+                       Convert.ToString(dataReader["Duration"])
                    );
                     SongsList.Add(s);
                 }

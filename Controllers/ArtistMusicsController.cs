@@ -29,7 +29,21 @@ namespace Server.Controllers
             }
 
         }
-      
+        [HttpGet]
+        [Route("GetNumberOfArtists")]
+        public IActionResult GetNumberOfArtists()
+        {
+            try
+            {
+                return Ok(ArtistMusic.GetNumberOfArtists());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
 
         [HttpGet]
         [Route("GetFavoriteArtistByUserId/UserId/{UserId}")]

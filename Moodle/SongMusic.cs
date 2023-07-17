@@ -11,7 +11,8 @@ namespace Server.Moodle
         public string LyricLink { get; private set; }
         public string UrlLink { get; private set; }
         public string YoutubeId { get; private set; }
-        public SongMusic(string id, string artistName, string name, string likes, string lyricLink, string urlLink, string youtubeId)
+        public string Duration { get; private set; }
+        public SongMusic(string id, string artistName, string name, string likes, string lyricLink, string urlLink, string youtubeId, string duration)
         {
             Id = id;
             ArtistName = artistName;
@@ -20,11 +21,17 @@ namespace Server.Moodle
             LyricLink = lyricLink;
             UrlLink = urlLink;
             YoutubeId = youtubeId;
+            Duration = duration;    
         }
         public static bool AddFavoriteSong(string UserId, string SongId)
         {
             DBservices dBservices = new DBservices();
             return dBservices.AddFavoriteSong(UserId, SongId);
+        }
+        public static int GetNumberOfSongs()
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.GetNumberOfSongs();
         }
         public static bool ChangeYoutubeIdSong(string SongId, string YoutubeId)
         {
