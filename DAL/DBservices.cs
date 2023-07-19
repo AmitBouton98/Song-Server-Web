@@ -938,11 +938,8 @@ namespace Server.Moodle.DAL
 
                     ArtistMusic u = new ArtistMusic(
                         Convert.ToString(dataReader["ArtistName"]),
-                        Convert.ToString(dataReader["Content"]),
-                        Convert.ToString(dataReader["Published"]),
-                        Convert.ToString(dataReader["Listeners"]),
-                        Convert.ToString(dataReader["Playcount"]),
-                        Convert.ToString(dataReader["Likes"])
+                        Convert.ToString(dataReader["Likes"]),
+                        Convert.ToString(dataReader["ArtistUrl"])
                     );
                     ArtistMusicList.Add(u);
                 }
@@ -1718,6 +1715,203 @@ namespace Server.Moodle.DAL
             }
 
         }
+        //--------------------------------------------------------------------------------------------------
+        // This method get song the user might like         
+        //--------------------------------------------------------------------------------------------------
+        public List<SongMusic> GetSongsUserMightLike(string UserId)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@UserId", UserId);
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetSongsUserMightLike", con, paramDic);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+
+            try
+            {
+                List<SongMusic> SongMusicList = new List<SongMusic>();
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+
+
+                    SongMusic u = new SongMusic(
+                        Convert.ToString(dataReader["Id"]),
+                        Convert.ToString(dataReader["ArtistName"]),
+                        Convert.ToString(dataReader["Name"]),
+                        Convert.ToString(dataReader["Likes"]),
+                        Convert.ToString(dataReader["LyricLink"]),
+                        Convert.ToString(dataReader["UrlLink"]),
+                        Convert.ToString(dataReader["YoutubeId"]),
+                        Convert.ToString(dataReader["Duration"])
+                    );
+                    SongMusicList.Add(u);
+                }
+                return SongMusicList;
+                //throw new Exception("There is no favotie song for this user");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method get top 10 artist         
+        //--------------------------------------------------------------------------------------------------
+        public List<ArtistMusic> GetTop10Artists()
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetTop10ArtistByPlayedSongs", con, null);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+
+            try
+            {
+                List<ArtistMusic> ArtistMusicList = new List<ArtistMusic>();
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+
+                    ArtistMusic u = new ArtistMusic(
+                        Convert.ToString(dataReader["ArtistName"]),
+                        Convert.ToString(dataReader["Likes"]),
+                        Convert.ToString(dataReader["ArtistUrl"])
+                    );
+                    ArtistMusicList.Add(u);
+                }
+                return ArtistMusicList;
+                //throw new Exception("There is no favotie song for this user");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method get favotie song by user id         
+        //--------------------------------------------------------------------------------------------------
+        public bool UpdateArtistUrl(string ArtistName, string ArtistUrl)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@ArtistName", ArtistName);
+            paramDic.Add("@ArtistUrl", ArtistUrl);
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_UpdateArtistUrl", con, paramDic);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+            // Set up the output parameter
+            SqlParameter isSuccessParam = new SqlParameter("@IsSuccess", SqlDbType.Bit);
+            isSuccessParam.Direction = ParameterDirection.Output;
+            cmd.Parameters.Add(isSuccessParam);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                //int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+                bool isSuccess = (bool)isSuccessParam.Value;
+                return isSuccess;
+                //throw new Exception("There is no favotie song for this user");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
         // end amit
 
         // khaled add this:  **** ****************** KHALEDFLAG.
@@ -1741,11 +1935,8 @@ namespace Server.Moodle.DAL
             }
             Dictionary<string, object> paramDic = new Dictionary<string, object>();
             paramDic.Add("@ArtistName", artist.ArtistName);
-            paramDic.Add("@Content", artist.Content);
-            paramDic.Add("@Published", artist.Published);
-            paramDic.Add("@Listeners", artist.Listeners);
-            paramDic.Add("@Playcount", artist.Playcount);
             paramDic.Add("@Likes", artist.Likes);
+            paramDic.Add("@ArtistUrl", artist.ArtistUrl);
             // create the command
             cmd = CreateCommandWithStoredProcedure("Proj_SP_CreateOrUpdateArtist", con, paramDic);             
             // Set up the output parameter
@@ -1855,11 +2046,8 @@ namespace Server.Moodle.DAL
                 {
                     ArtistMusic u = new ArtistMusic(
                         Convert.ToString(dataReader["ArtistName"]),
-                        Convert.ToString(dataReader["Content"]),
-                        Convert.ToString(dataReader["Published"]),
-                        Convert.ToString(dataReader["Listeners"]),
-                        Convert.ToString(dataReader["Playcount"]),
-                        Convert.ToString(dataReader["Likes"])
+                        Convert.ToString(dataReader["Likes"]),
+                        Convert.ToString(dataReader["ArtistUrl"])
                     );
                     return u;
                 }
@@ -1914,11 +2102,8 @@ namespace Server.Moodle.DAL
                 {
                     ArtistMusic a = new ArtistMusic(
                         Convert.ToString(dataReader["ArtistName"]),
-                        Convert.ToString(dataReader["Content"]),
-                        Convert.ToString(dataReader["Published"]),
-                        Convert.ToString(dataReader["Listeners"]),
-                        Convert.ToString(dataReader["Playcount"]),
-                        Convert.ToString(dataReader["Likes"])
+                        Convert.ToString(dataReader["Likes"]),
+                        Convert.ToString(dataReader["ArtistUrl"])
                     );
                     ArtistsList.Add(a);
                 }

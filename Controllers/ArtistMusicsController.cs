@@ -92,6 +92,21 @@ namespace Server.Controllers
             }
 
         }
+        [HttpGet]
+        [Route("GetTop10Artists")]
+        public IActionResult GetTop10Artists()
+        {
+            try
+            {
+                var usr = ArtistMusic.GetTop10Artists();
+                return Ok(usr);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+
+        }
         [HttpPost]
         public IActionResult Post([FromBody] ArtistMusic artist)
         {
@@ -122,7 +137,21 @@ namespace Server.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
             }
         }
-
+        // need to change to add favorit to user  FLAGKHALED
+        // PUT api/<UserMusicsController>/5
+        [HttpPut]
+        [Route("UpdateArtistUrl")]
+        public IActionResult UpdateArtistUrl(string ArtistName, string ArtistUrl)
+        {
+            try
+            {
+                return Ok(ArtistMusic.UpdateArtistUrl(ArtistName, ArtistUrl));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+        }
         // DELETE api/<WebUsersController>/5
         [HttpDelete]
         [Route("Delete")]
