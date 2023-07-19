@@ -9,12 +9,77 @@ namespace Server.Controllers
     [ApiController]
     public class UploadController : ControllerBase
     {
-        // GET: api/<UploadController>
+
+        // GET api/<UploadController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get(string fileName)
         {
-            return new string[] { "value1", "value2" };
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return BadRequest("Please provide a valid file name.");
+            }
+
+            string path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "usersImages");
+            var files = Directory.GetFiles(path);
+
+            string foundFilePath = null;
+
+            // Find the file with a matching name (ignoring the extension)
+            foreach (var filePath in files)
+            {
+                if (Path.GetFileNameWithoutExtension(filePath) == fileName)
+                {
+                    foundFilePath = filePath;
+                    break;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(foundFilePath) && System.IO.File.Exists(foundFilePath))
+            {
+                // Determine the content type based on the file extension
+                string contentType = GetContentType(foundFilePath);
+
+                // Return the image file to the client's browser
+                return File(System.IO.File.OpenRead(foundFilePath), contentType);
+            }
+            else
+            {
+                // If the file does not exist, return a not found status
+                return NotFound();
+            }
         }
+
+        private string GetContentType(string filePath)
+        {
+            // Get the file extension
+            string extension = Path.GetExtension(filePath);
+
+            // Set the default content type to "application/octet-stream" (generic binary)
+            string contentType = "application/octet-stream";
+
+            // Map commonly used file extensions to their corresponding content types
+            if (!string.IsNullOrEmpty(extension))
+            {
+                switch (extension.ToLower())
+                {
+                    case ".jpg":
+                    case ".jpeg":
+                        contentType = "image/jpeg";
+                        break;
+                    case ".png":
+                        contentType = "image/png";
+                        break;
+                    case ".gif":
+                        contentType = "image/gif";
+                        break;
+                        // Add more cases as needed for other file types
+                }
+            }
+
+            return contentType;
+        }
+
+
 
         // GET api/<UploadController>/5
         [HttpGet("{id}")]
