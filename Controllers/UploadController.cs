@@ -20,27 +20,15 @@ namespace Server.Controllers
             }
 
             string path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "usersImages");
-            var files = Directory.GetFiles(path);
+            var filePath = Path.Combine(path, fileName);
 
-            string foundFilePath = null;
-
-            // Find the file with a matching name (ignoring the extension)
-            foreach (var filePath in files)
-            {
-                if (Path.GetFileNameWithoutExtension(filePath) == fileName)
-                {
-                    foundFilePath = filePath;
-                    break;
-                }
-            }
-
-            if (!string.IsNullOrEmpty(foundFilePath) && System.IO.File.Exists(foundFilePath))
+            if (System.IO.File.Exists(filePath))
             {
                 // Determine the content type based on the file extension
-                string contentType = GetContentType(foundFilePath);
+                string contentType = GetContentType(filePath);
 
                 // Return the image file to the client's browser
-                return File(System.IO.File.OpenRead(foundFilePath), contentType);
+                return File(System.IO.File.OpenRead(filePath), contentType);
             }
             else
             {
@@ -78,6 +66,7 @@ namespace Server.Controllers
 
             return contentType;
         }
+
 
 
 
