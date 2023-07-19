@@ -100,6 +100,23 @@ namespace Server.Controllers
         }
         // GET api/<UserMusicsController>/5
         [HttpGet]
+        [Route("GetSongsUserMightLike/UserId/{UserId}")]
+        public IActionResult GetSongsUserMightLike(string UserId)
+        {
+            try
+            {
+                var usr = SongMusic.GetSongsUserMightLike(UserId);
+                return Ok(usr);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+
+        }
+
+        // GET api/<UserMusicsController>/5
+        [HttpGet]
         [Route("GetTheNumberPlayedForGivenSong/SongId/{SongId}")]
         public IActionResult GetTheNumberPlayedForGivenSong(string SongId)
         {

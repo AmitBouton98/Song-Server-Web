@@ -6,21 +6,16 @@ namespace Server.Moodle
     {
 
         public string ArtistName { get; private set; }
-        public string Content { get; private set; }
-        public string Published { get; private set; }
-        public string Listeners { get; private set; }
-        public string Playcount { get; private set; }
         public string Likes { get; private set; }
+        public string ArtistUrl { get; private set; }
 
-        public ArtistMusic(string artistName, string content, string published, string listeners, string playcount, string likes)
+        public ArtistMusic(string artistName, string likes, string artistUrl)
         {
             ArtistName = artistName;
-            Content = content;
-            Published = published;
-            Listeners = listeners;
-            Playcount = playcount;
             Likes = likes;
+            ArtistUrl = artistUrl;
         }
+
         public static int GetNumberOfArtists()
         {
             DBservices dBservices = new DBservices();
@@ -36,10 +31,20 @@ namespace Server.Moodle
             DBservices dBservices = new DBservices();
             return dBservices.DeleteFavoriteArtist(UserId, ArtistName);
         }
+        public static bool UpdateArtistUrl(string ArtistName, string ArtistUrl)
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.UpdateArtistUrl(ArtistName, ArtistUrl);
+        }
         public static List<ArtistMusic> GetFavoriteArtistByUserId(string UserId)
         {
             DBservices dBservices = new DBservices();
             return dBservices.GetFavoriteArtistByUserId(UserId);
+        }
+        public static List<ArtistMusic> GetTop10Artists()
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.GetTop10Artists();
         }
         public static int GetTheNumberOfAppearanceInUserByGivenArtist(string ArtistName)
         {

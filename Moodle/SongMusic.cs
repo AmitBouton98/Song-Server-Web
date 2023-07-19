@@ -58,6 +58,11 @@ namespace Server.Moodle
             DBservices dBservices = new DBservices();
             return dBservices.GetFavoriteSongByUserId(UserId);
         }
+        public static List<SongMusic> GetSongsUserMightLike(string UserId)
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.GetSongsUserMightLike(UserId);
+        }
         public static int GetTheNumberOfAppearanceInUserByGivenSong(string SongId)
         {
             DBservices dBservices = new DBservices();
