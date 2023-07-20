@@ -34,6 +34,22 @@ namespace Server.Controllers
             }
             
         }
+        // GET api/<UserMusicsController>/5
+        [HttpGet]
+        [Route("GetUserById/Id/{id}")]
+        public IActionResult GetUserById(string id) // sending email
+        {
+            try
+            {
+                var usr = UserMusic.GetUserById(id);
+                return Ok(usr);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+
+        }
         [HttpGet]
         [Route("CheckIfKeyCorrect")]
         public IActionResult CheckIfKeyCorrect(string key, string email, string password)

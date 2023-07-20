@@ -99,7 +99,71 @@ namespace Server.Moodle.DAL
             }
 
         }
+        //--------------------------------------------------------------------------------------------------
+        // This method get user by id 
+        //--------------------------------------------------------------------------------------------------
+        public UserMusic GetUserById(string id)
+        {
 
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@UserId", id);
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetUserById", con, paramDic);                // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    UserMusic u = new UserMusic(
+                        Convert.ToString(dataReader["Id"]),
+                        Convert.ToString(dataReader["First"]),
+                        Convert.ToString(dataReader["Last"]),
+                        Convert.ToString(dataReader["Email"]),
+                        Convert.ToString(dataReader["Password"]),
+                        Convert.ToString(dataReader["ImgUrl"]),
+                        Convert.ToDateTime(dataReader["RegistrationDate"])
+                    );
+                    return u;
+                }
+                throw new Exception("User doesnt exists");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
         //--------------------------------------------------------------------------------------------------
         // This method get user by email        
         //--------------------------------------------------------------------------------------------------
