@@ -5,7 +5,7 @@ namespace Server.Moodle
     public class SongComment : Comment
     {
         public string SongId { get; set; }  
-        public SongComment(string userId, string id, string text, string createDate, string songId) : base(userId, id, text, createDate)
+        public SongComment(string userId, string id, string text, string createDate, string songId , string star) : base(userId, id, text, createDate, star)
         {
             SongId = songId;    
         }
