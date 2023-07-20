@@ -23,7 +23,7 @@ namespace Server.Controllers
         }
         [HttpGet]
         [Route("GetArtistComments/artistName/{artistName}")]
-        public IActionResult GetByemail(string artistName) 
+        public IActionResult GetArtistComments(string artistName) 
         {
             try
             {
@@ -64,7 +64,7 @@ namespace Server.Controllers
         }
         [HttpPost]
         [Route("PostSongComment")]
-        public IActionResult Post([FromBody] SongComment sc)
+        public IActionResult PostSongComment([FromBody] SongComment sc)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace Server.Controllers
         }
         [HttpPost]
         [Route("PostArtistComment")]
-        public IActionResult Post([FromBody] ArtistComment ac)
+        public IActionResult PostArtistComment([FromBody] ArtistComment ac)
         {
             try
             {
