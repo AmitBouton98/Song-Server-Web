@@ -2455,7 +2455,7 @@ namespace Server.Moodle.DAL
             paramDic.Add("@Comment",songComment.Text);
             paramDic.Add("@CreateDate", songComment.CreateDate);
             paramDic.Add("@SongId", songComment.SongId);
-            paramDic.Add("@Starts", songComment.Stars);
+            paramDic.Add("@Stars", songComment.Stars);
             // create the command
             cmd = CreateCommandWithStoredProcedure("Proj_SP_CreateOrUpdateCommentForSong", con, paramDic);
             // Set up the output parameter
@@ -2521,7 +2521,7 @@ namespace Server.Moodle.DAL
                        Convert.ToString(dataReader["UserId"]),
                        Convert.ToString(dataReader["Id"]),
                        Convert.ToString(dataReader["Comment"]),
-                       Convert.ToString(dataReader["CreateDate"]),
+                       Convert.ToDateTime(dataReader["CreateDate"]),
                        Convert.ToString(dataReader["SongId"]),
                        Convert.ToString(dataReader["Stars"])
                    );
@@ -2682,7 +2682,7 @@ namespace Server.Moodle.DAL
                        Convert.ToString(dataReader["UserId"]),
                        Convert.ToString(dataReader["Id"]),
                        Convert.ToString(dataReader["Comment"]),
-                       Convert.ToString(dataReader["CreateDate"]),
+                       Convert.ToDateTime(dataReader["CreateDate"]),
                        Convert.ToString(dataReader["ArtistName"]),
                        Convert.ToString(dataReader["Stars"])
                    );
