@@ -19,6 +19,11 @@ namespace Server.Moodle
             DBservices dBservices = new DBservices();
             return dBservices.GetAllArtistComments(artistName);
         }
+        public static double GetAvgNumberForGivenArtist(string artistName)
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.GetAvgNumberForGivenArtist(artistName);
+        }
         public static bool Delete(string id)
         {
             DBservices dBservices = new DBservices();

@@ -1976,6 +1976,126 @@ namespace Server.Moodle.DAL
             }
 
         }
+        //--------------------------------------------------------------------------------------------------
+        // This method get avg for given artist         
+        //--------------------------------------------------------------------------------------------------
+        public double GetAvgNumberForGivenArtist(string ArtistName)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@ArtistName", ArtistName);
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetAvgRatingForGivenArtist", con, paramDic);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+
+                    return Convert.ToDouble(dataReader["AvgRating"]);
+                }
+                return 0;
+                //throw new Exception("There is no favotie song for this user");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method get avg for given song id          
+        //--------------------------------------------------------------------------------------------------
+        public double GetAvgNumberForGivenSong(string SongId)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@SongId", SongId);
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetAvgRatingForGivenSong", con, paramDic);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+
+                    return Convert.ToDouble(dataReader["AvgRating"]);
+                }
+                return 0;
+                //throw new Exception("There is no favotie song for this user");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
         // end amit
 
         // khaled add this:  **** ****************** KHALEDFLAG.

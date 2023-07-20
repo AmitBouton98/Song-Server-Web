@@ -15,15 +15,20 @@ namespace Server.Moodle
             DBservices dBservices = new DBservices();
             return dBservices.InsertSongCommentOrUpdate(songComment);
         }
-        public static List<SongComment> GetCommentBySongID(string id)
+        public static List<SongComment> GetCommentBySongID(string SongId)
         {
             DBservices dBservices = new DBservices();
-            return dBservices.GetAllSongComments(id);
+            return dBservices.GetAllSongComments(SongId);
         }
-        public static bool Delete(string id)
+        public static double GetAvgNumberForGivenSong(string SongId)
         {
             DBservices dBservices = new DBservices();
-            return dBservices.DeleteSongComment(id);
+            return dBservices.GetAvgNumberForGivenSong(SongId);
+        }
+        public static bool Delete(string CommentId)
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.DeleteSongComment(CommentId);
         }
     }
 }

@@ -35,6 +35,32 @@ namespace Server.Controllers
             }
 
         }
+        [HttpGet]
+        [Route("GetAvgNumberForGivenArtist/artistName/{artistName}")]
+        public IActionResult GetAvgNumberForGivenArtist(string artistName)
+        {
+            try
+            {
+                return Ok(ArtistComment.GetAvgNumberForGivenArtist(artistName));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+        }
+        [HttpGet]
+        [Route("GetAvgNumberForGivenSong/SongId/{SongId}")]
+        public IActionResult GetAvgNumberForGivenSong(string SongId)
+        {
+            try
+            {
+                return Ok(SongComment.GetAvgNumberForGivenSong(SongId));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+        }
         [HttpDelete]
         [Route("DeleteArtistComment/commentId/{commentId}")]
         public IActionResult DeleteArtistComment(string commentId)
