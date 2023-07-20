@@ -4,11 +4,12 @@ namespace Server.Moodle
 {
     public class SongComment : Comment
     {
-        public string SongId { get; set; }  
-        public SongComment(string userId, string id, string text, string createDate, string songId , string star) : base(userId, id, text, createDate, star)
+        public string SongId { get; set; }
+        public SongComment(string userId, string id, string text, DateTime createDate, string songId, string stars) : base(userId, id, text, createDate, stars)
         {
-            SongId = songId;    
+            SongId = songId;
         }
+
         public static bool InsertSongCommentOrUpdate(SongComment songComment)
         {
             DBservices dBservices = new DBservices();
