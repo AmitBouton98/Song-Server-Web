@@ -66,6 +66,11 @@ namespace Server.Moodle
             DBservices dBservices = new DBservices();
             return dBservices.GetArtistByName(name);
         }
+        public static ArtistMusic GetTop1ArtistForUser(string UserId)
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.GetTop1ArtistForUser(UserId);
+        }
         public static bool InsertOrUpdateArtist(ArtistMusic artist)
         {
             DBservices dBservices = new DBservices();

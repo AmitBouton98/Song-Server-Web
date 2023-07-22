@@ -2593,6 +2593,217 @@ namespace Server.Moodle.DAL
             }
 
         }
+        //--------------------------------------------------------------------------------------------------
+        // This method get the number of played for user
+        //--------------------------------------------------------------------------------------------------
+        public int GetNumberOfPlayedForUser(string UserId)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@UserId", UserId);
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetNumberOfPlayedForUser", con, paramDic);
+            try
+            {
+
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    return Convert.ToInt32(dataReader["Played"]);
+
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method get the score for user
+        //--------------------------------------------------------------------------------------------------
+        public int GetScoreForUser(string UserId)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@UserId", UserId);
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetScoreForUser", con, paramDic);
+            try
+            {
+
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    return Convert.ToInt32(dataReader["Score"]);
+
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method get the top 1 song for user
+        //--------------------------------------------------------------------------------------------------
+        public SongMusic GetTop1SongForUser(string UserId)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@UserId", UserId);
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetTop1SongForUser", con, paramDic);
+            try
+            {
+
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    SongMusic s = new SongMusic(
+                        Convert.ToString(dataReader["Id"]),
+                        Convert.ToString(dataReader["ArtistName"]),
+                        Convert.ToString(dataReader["Name"]),
+                        Convert.ToString(dataReader["Likes"]),
+                        Convert.ToString(dataReader["LyricLink"]),
+                        Convert.ToString(dataReader["UrlLink"]),
+                        Convert.ToString(dataReader["YoutubeId"]),
+                        Convert.ToString(dataReader["Duration"])
+                    );
+                    return s;
+
+                }
+                throw new Exception ("There is not Favorite Artist for this user");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method get top 1 artist for user        
+        //--------------------------------------------------------------------------------------------------
+        public ArtistMusic GetTop1ArtistForUser(string UserId)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@UserId", UserId);
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetTop1ArtistForUser", con, paramDic);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    ArtistMusic u = new ArtistMusic(
+                        Convert.ToString(dataReader["ArtistName"]),
+                        Convert.ToString(dataReader["Likes"]),
+                        Convert.ToString(dataReader["ArtistUrl"])
+                    );
+                    return u;
+                }
+                throw new Exception("there is not top 1 artist for user");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
         // end amit
 
         // khaled add this:  **** ****************** KHALEDFLAG.
@@ -2963,7 +3174,7 @@ namespace Server.Moodle.DAL
                         Convert.ToString(dataReader["Likes"]),
                         Convert.ToString(dataReader["LyricLink"]),
                         Convert.ToString(dataReader["UrlLink"]),
-                        Convert.ToString(dataReader["Youtube"]),
+                        Convert.ToString(dataReader["YoutubeId"]),
                         Convert.ToString(dataReader["Duration"])
                     );
                     return s;

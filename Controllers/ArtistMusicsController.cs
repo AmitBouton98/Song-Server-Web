@@ -43,7 +43,20 @@ namespace Server.Controllers
             }
 
         }
+        [HttpGet]
+        [Route("GetTop1ArtistForUser")]
+        public IActionResult GetTop1ArtistForUser(string UserId)
+        {
+            try
+            {
+                return Ok(ArtistMusic.GetTop1ArtistForUser(UserId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
+        }
 
         [HttpGet]
         [Route("GetFavoriteArtistByUserId/UserId/{UserId}")]

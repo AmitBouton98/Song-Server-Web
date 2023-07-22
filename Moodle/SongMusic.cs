@@ -33,6 +33,11 @@ namespace Server.Moodle
             DBservices dBservices = new DBservices();
             return dBservices.GetNumberOfSongs();
         }
+        public static SongMusic GetTop1SongForUser(string UserId)
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.GetTop1SongForUser(UserId);
+        }
         public static bool ChangeYoutubeIdSong(string SongId, string YoutubeId)
         {
             DBservices dBservices = new DBservices();

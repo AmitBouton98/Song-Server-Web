@@ -17,6 +17,11 @@ namespace Server.Moodle
             DBservices dBservices = new DBservices();
             return dBservices.CreateOrUpdateScore(up);
         }
+        public static int GetScoreForUser(string UserId)
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.GetScoreForUser(UserId);
+        }
         public static List<UserPoint> GetTop10Scores()
         {
             DBservices dBservices = new DBservices();
