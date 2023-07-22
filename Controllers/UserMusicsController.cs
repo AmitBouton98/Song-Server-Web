@@ -65,6 +65,19 @@ namespace Server.Controllers
 
         }
         [HttpGet]
+        [Route("GetNumberOfPlayedForUser")]
+        public IActionResult GetNumberOfPlayedForUser(string UserId)
+        {
+            try
+            {
+                return Ok(UserMusic.GetNumberOfPlayedForUser(UserId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet]
         [Route("GetNumberOfUsers")]
         public IActionResult GetNumberOfUsers()
         {

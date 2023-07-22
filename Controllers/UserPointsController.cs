@@ -16,7 +16,20 @@ namespace Server.Controllers
         {
             return new string[] { "value1", "value2" };
         }
+        [HttpGet]
+        [Route("GetScoreForUser")]
+        public IActionResult GetScoreForUser(string UserId)
+        {
+            try
+            {
+                return Ok(UserPoint.GetScoreForUser(UserId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
+        }
         // GET api/<UserPointsController>/5
         [HttpGet]
         [Route("GetTop10Scores")]

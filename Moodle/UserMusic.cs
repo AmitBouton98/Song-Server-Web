@@ -139,6 +139,11 @@ namespace Server.Moodle
             DBservices dBservices = new DBservices();
             return dBservices.GetNumberOfUsers();
         }
+        public static int GetNumberOfPlayedForUser(string UserId)
+        {
+            DBservices dBservices = new DBservices();
+            return dBservices.GetNumberOfPlayedForUser(UserId);
+        }
         //this sha256 algo encrypt the code
         private static string key = "123";
 
