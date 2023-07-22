@@ -2096,6 +2096,390 @@ namespace Server.Moodle.DAL
             }
 
         }
+        //--------------------------------------------------------------------------------------------------
+        // This method get question number 1          
+        //--------------------------------------------------------------------------------------------------
+        public QuestionMusic CreateQustion1WhoCreatedTheSong()
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_CreateQustion1WhoCreatedTheSong", con, paramDic);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    QuestionMusic qm = new QuestionMusic(
+                        Convert.ToString(dataReader["Question"]),
+                        Convert.ToString(dataReader["CorrectAnswer"]),
+                        Convert.ToString(dataReader["IncorrectAnswer1"]),
+                        Convert.ToString(dataReader["IncorrectAnswer2"]),
+                        Convert.ToString(dataReader["IncorrectAnswer3"]));
+                    return qm;
+                }
+                throw new Exception("Problem with generate question");
+                //throw new Exception("There is no favotie song for this user");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method get question number 2          
+        //--------------------------------------------------------------------------------------------------
+        public QuestionMusic CreateQustion2WhatSongBelongToArtist()
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_CreateQustion2WhatSongBelongToArtist", con, paramDic);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    QuestionMusic qm = new QuestionMusic(
+                        Convert.ToString(dataReader["Question"]),
+                        Convert.ToString(dataReader["CorrectAnswer"]),
+                        Convert.ToString(dataReader["IncorrectAnswer1"]),
+                        Convert.ToString(dataReader["IncorrectAnswer2"]),
+                        Convert.ToString(dataReader["IncorrectAnswer3"]));
+                    return qm;
+                }
+                throw new Exception("Problem with generate question");
+                //throw new Exception("There is no favotie song for this user");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method get question number 3          
+        //--------------------------------------------------------------------------------------------------
+        public QuestionMusic CreateQustion3WhatPicBelongToArtist()
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_CreateQustion3WhatPicBelongToArtist", con, paramDic);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    QuestionMusic qm = new QuestionMusic(
+                        Convert.ToString(dataReader["Question"]),
+                        Convert.ToString(dataReader["CorrectAnswer"]),
+                        Convert.ToString(dataReader["IncorrectAnswer1"]),
+                        Convert.ToString(dataReader["IncorrectAnswer2"]),
+                        Convert.ToString(dataReader["IncorrectAnswer3"]));
+                    return qm;
+                }
+                throw new Exception("Problem with generate question");
+                //throw new Exception("There is no favotie song for this user");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method get question number 4          
+        //--------------------------------------------------------------------------------------------------
+        public QuestionMusic CreateQustion4WhatPicBelongToSong()
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_CreateQustion4WhatPicBelongToSong", con, paramDic);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    QuestionMusic qm = new QuestionMusic(
+                        Convert.ToString(dataReader["Question"]),
+                        Convert.ToString(dataReader["CorrectAnswer"]),
+                        Convert.ToString(dataReader["IncorrectAnswer1"]),
+                        Convert.ToString(dataReader["IncorrectAnswer2"]),
+                        Convert.ToString(dataReader["IncorrectAnswer3"]));
+                    return qm;
+                }
+                throw new Exception("Problem with generate question");
+                //throw new Exception("There is no favotie song for this user");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method get question number 5          
+        //--------------------------------------------------------------------------------------------------
+        public QuestionMusic CreateQustion5WhatIsTheDurationForSong()
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_CreateQustion5WhatIsTheDurationForSong", con, paramDic);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    QuestionMusic qm = new QuestionMusic(
+                        Convert.ToString(dataReader["Question"]),
+                        Convert.ToString(dataReader["CorrectAnswer"]),
+                        Convert.ToString(dataReader["IncorrectAnswer1"]),
+                        Convert.ToString(dataReader["IncorrectAnswer2"]),
+                        Convert.ToString(dataReader["IncorrectAnswer3"]));
+                    return qm;
+                }
+                throw new Exception("Problem with generate question");
+                //throw new Exception("There is no favotie song for this user");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method get question number 6          
+        //--------------------------------------------------------------------------------------------------
+        public QuestionMusic CreateQustion6whichSongBeginWith()
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_CreateQustion6whichSongBeginWith", con, paramDic);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    QuestionMusic qm = new QuestionMusic(
+                        Convert.ToString(dataReader["Question"]),
+                        Convert.ToString(dataReader["CorrectAnswer"]),
+                        Convert.ToString(dataReader["IncorrectAnswer1"]),
+                        Convert.ToString(dataReader["IncorrectAnswer2"]),
+                        Convert.ToString(dataReader["IncorrectAnswer3"]));
+                    return qm;
+                }
+                throw new Exception("Problem with generate question");
+                //throw new Exception("There is no favotie song for this user");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
         // end amit
 
         // khaled add this:  **** ****************** KHALEDFLAG.

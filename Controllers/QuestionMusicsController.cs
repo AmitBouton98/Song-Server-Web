@@ -8,13 +8,84 @@ namespace Server.Controllers
     [ApiController]
     public class QuestionMusicsController : ControllerBase
     {
-        // GET: api/<QuestionMusicsController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        [Route("CreateQustion1WhoCreatedTheSong")]
+        public IActionResult CreateQustion1WhoCreatedTheSong()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                return Ok(QuestionMusic.CreateQustion1WhoCreatedTheSong());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
         }
-
+        [HttpGet]
+        [Route("CreateQustion2WhatSongBelongToArtist")]
+        public IActionResult CreateQustion2WhatSongBelongToArtist()
+        {
+            try
+            {
+                return Ok(QuestionMusic.CreateQustion2WhatSongBelongToArtist());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+        }
+        [HttpGet]
+        [Route("CreateQustion3WhatPicBelongToArtist")]
+        public IActionResult CreateQustion3WhatPicBelongToArtist()
+        {
+            try
+            {
+                return Ok(QuestionMusic.CreateQustion3WhatPicBelongToArtist());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+        }
+        [HttpGet]
+        [Route("CreateQustion4WhatPicBelongToSong")]
+        public IActionResult CreateQustion4WhatPicBelongToSong()
+        {
+            try
+            {
+                return Ok(QuestionMusic.CreateQustion4WhatPicBelongToSong());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+        }
+        [HttpGet]
+        [Route("CreateQustion5WhatIsTheDurationForSong")]
+        public IActionResult CreateQustion5WhatIsTheDurationForSong()
+        {
+            try
+            {
+                return Ok(QuestionMusic.CreateQustion5WhatIsTheDurationForSong());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+        }
+        [HttpGet]
+        [Route("CreateQustion6whichSongBeginWith")]
+        public IActionResult CreateQustion6whichSongBeginWith()
+        {
+            try
+            {
+                return Ok(QuestionMusic.CreateQustion6whichSongBeginWith());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
+            }
+        }
         // GET api/<QuestionMusicsController>/5
         [HttpGet("{id}")]
         public string Get(int id)

@@ -19,7 +19,6 @@ namespace Server.Controllers
             {
                 return StatusCode(StatusCodes.Status400BadRequest, new { error = ex.Message });
             }
-
         }
         [HttpGet]
         [Route("GetArtistComments/artistName/{artistName}")]
