@@ -2480,6 +2480,119 @@ namespace Server.Moodle.DAL
             }
 
         }
+        //--------------------------------------------------------------------------------------------------
+        // This method insert or update score for user        
+        //--------------------------------------------------------------------------------------------------
+
+        public bool CreateOrUpdateScore(UserPoint up)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@UserId", up.UserId);
+            paramDic.Add("@Score", up.Score);
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_CreateOrUpdateScore", con, paramDic);             // create the command
+                                                                                                             // Set up the output parameter
+            SqlParameter isSuccessParam = new SqlParameter("@IsSuccess", SqlDbType.Bit);
+            isSuccessParam.Direction = ParameterDirection.Output;
+            cmd.Parameters.Add(isSuccessParam);
+
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                //int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+                bool isSuccess = (bool)isSuccessParam.Value;
+                return isSuccess;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+        //--------------------------------------------------------------------------------------------------
+        // This method get question number 6          
+        //--------------------------------------------------------------------------------------------------
+        public List<UserPoint> GetTop10Scores()
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_GetTop10Scores", con, paramDic);             // create the command
+            var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+            List<UserPoint> UserPointList = new List<UserPoint>();
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    UserPoint up = new UserPoint(
+                        Convert.ToString(dataReader["UserId"]),
+                        Convert.ToString(dataReader["Score"]));
+                    UserPointList.Add(up);
+                }
+                return UserPointList;
+                //throw new Exception("There is no favotie song for this user");
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+                // note that the return value appears only after closing the connection
+                var result = returnParameter.Value;
+            }
+
+        }
         // end amit
 
         // khaled add this:  **** ****************** KHALEDFLAG.
